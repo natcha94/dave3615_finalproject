@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -18,10 +19,10 @@ public class RestController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/users/{id}")
+/*    @GetMapping("/users/{id}")
     public User getUserById(@PathVariable long id){
         return userService.getUserById(id);
-    }
+    }*/
 
     @DeleteMapping("/users/{id}")
     public void deleteUserById(@PathVariable long id){
@@ -38,6 +39,11 @@ public class RestController {
     public User updateUser(@PathVariable long id, @RequestBody User newUser){
         newUser.setId(id);
         return userService.saveUser(newUser);
+    }
+
+    @GetMapping("/users/{id}")
+    public User getUserByUserName(@PathVariable String id){
+        return userService.getUserByUserName(id);
     }
 }
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>Login</title>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="container">
+        <div class="row justify-content-md-center mt-5">
+            <div class="col-md-auto imgcontainer">
+                <img src="https://freestylelanguagecenter.com/wp-content/uploads/2018/11/005-girl-1.png" alt="Avatar" class="avatar">
+            </div>
+
+        </div>
+        <div class="row justify-content-md-center">
+            <div class="col-8">
+                <form action="/login" method="POST">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="username" name="username" class="form-control" placeholder="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="password">
+                    </div>
+
+                    <button class="btn btn-success btn-lg btn-block" type="submit" >Login</button>
+
+                </form>
+                <a class="btn btn-link my-2" href="/signup">Create a new account </a>
+                <a class="btn btn-link my-2" href="/signupAdmin">Create a new admin account </a>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+</body>
+</html>

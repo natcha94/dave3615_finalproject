@@ -8,8 +8,6 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@NoArgsConstructor
-@ToString
 public class Following {
 
     @Id
@@ -17,5 +15,8 @@ public class Following {
     private long id;
     @ManyToOne
     private User user;
+
+    public Following (){
+    }
 
 }

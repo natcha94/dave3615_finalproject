@@ -9,8 +9,6 @@ import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
-@ToString
 public class User {
 
     @Id
@@ -21,11 +19,24 @@ public class User {
     private String email;
     private String userName;
     private String password;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="role_id")
     private Role roleId;
     @OneToMany(mappedBy = "user")
     private List<Follower> followerList;
     @OneToMany(mappedBy = "user")
     private List<Following> followingList;
+
+    public User (){
+
+    }
+
+    public User(String firstName, String lastName, String email, String userName, String password){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+    }
 
 }
