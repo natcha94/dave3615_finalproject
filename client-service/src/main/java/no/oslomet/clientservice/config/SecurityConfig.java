@@ -1,5 +1,6 @@
 package no.oslomet.clientservice.config;
 
+import no.oslomet.clientservice.service.LoginService;
 import no.oslomet.clientservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,11 +17,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UserService UserService;
+    private LoginService LoginService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder authBuilder) throws Exception {
-        authBuilder.userDetailsService(UserService);
+        authBuilder.userDetailsService(LoginService);
     }
 
     protected void configure(HttpSecurity http) throws Exception {

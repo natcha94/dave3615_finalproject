@@ -16,10 +16,6 @@ import java.util.List;
 @SpringBootApplication
 public class UserServiceApplication implements CommandLineRunner {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);

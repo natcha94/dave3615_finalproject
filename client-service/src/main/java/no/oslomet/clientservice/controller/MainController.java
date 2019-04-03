@@ -35,6 +35,7 @@ public class MainController {
 
     @GetMapping("/home")
     public String homePage(Model model){
+        System.out.println("homePage");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUserName(auth.getName());
         loggedInUser = user;
@@ -46,27 +47,19 @@ public class MainController {
     @GetMapping("/signup")
     public String signup(Model model){
         System.out.println("signup");
-        List<Role> roleList = roleService.getAllRoles();
-        Role userRole = roleService.getRoleById(1);
-        model.addAttribute("roles", userRole);
-        model.addAttribute("user", new User());
         return "signup";
     }
 
     @GetMapping("/signupAdmin")
     public String signupAdmin(Model model){
         System.out.println("signupAdmin");
-        model.addAttribute("roles", roleService.getAllRoles());
         return "signupAdmin";
     }
 
     @PostMapping("/processRegistration")
     public String register(@ModelAttribute("user") User user){
         System.out.println("processRegistration");
-        //System.out.println(user.getUserName() + ", " + user.getRoleId().getRoleName());
-        /*Role role = roleService.getRoleById(1);*/
         user.setRoleId(roleService.getRoleById(1));
-        System.out.println(user.getRoleId().getRoleName());
         userService.saveUser(user);
         return "redirect:/";
     }
@@ -74,8 +67,7 @@ public class MainController {
     @PostMapping("/processRegistrationAdmin")
     public String registerAdmin(@ModelAttribute("user") User adminUser){
         System.out.println("processRegistrationAdmin");
-        Role adminRole = roleService.getRoleById(2);
-        adminUser.setRoleId(adminRole);
+        adminUser.setRoleId(roleService.getRoleById(2));
         userService.saveUser(adminUser);
         return "redirect:/";
     }

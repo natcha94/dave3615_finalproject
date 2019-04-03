@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -50,16 +50,4 @@ public class UserService implements UserDetailsService {
         restTemplate.delete(BASE_URL+"/"+id);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = restTemplate.getForObject(BASE_URL+"/"+username, User.class);
-        if(user == null) throw new UsernameNotFoundException("Not found user with email: " + username);
-        return getUserDetails(user);
-    }
-
-    private UserDetails getUserDetails(User user){
-        return org.springframework.security.core.userdetails.User.withUsername(user.getUserName())
-                .password(user.getPassword())
-                .roles(user.getRoleId().getRoleName()).build();
-    }
 }
