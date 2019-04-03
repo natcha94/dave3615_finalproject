@@ -24,7 +24,7 @@ public class Tweet {
     @OneToMany(mappedBy = "tweet")
     List<Retweet> retweets;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name="tweetHashtags",
             joinColumns = { @JoinColumn(name = "tweet_id") },
             inverseJoinColumns = { @JoinColumn(name = "hashtag_id")})

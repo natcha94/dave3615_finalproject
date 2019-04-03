@@ -17,10 +17,10 @@ public class HashtagController {
         return hashtagService.getAllHashtags();
     }
 
-    @GetMapping("/hashtags/{id}")
+/*    @GetMapping("/hashtags/{id}")
     public Hashtag getHashtagById(@PathVariable long id) {
         return hashtagService.getHashtagById(id);
-    }
+    }*/
 
     @DeleteMapping("/hashtags/{id}")
     public void deleteHashtagById(@PathVariable long id) {
@@ -36,5 +36,10 @@ public class HashtagController {
     public Hashtag updateHashtag(@PathVariable long id, @RequestBody Hashtag hashtag) {
         hashtag.setId(id);
         return hashtagService.saveHashtag(hashtag);
+    }
+
+    @GetMapping("/hashtags/{id}")
+    public Hashtag getHashtagByName(@PathVariable String id) {
+        return hashtagService.getHashtagByName(id);
     }
 }

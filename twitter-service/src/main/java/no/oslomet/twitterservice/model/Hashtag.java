@@ -17,10 +17,14 @@ public class Hashtag {
     private String name;
 
     @Getter(AccessLevel.NONE)
-    @ManyToMany(mappedBy = "hashtags")
+    @ManyToMany(mappedBy = "hashtags", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Tweet> tweets = new ArrayList<>();
 
     public Hashtag() {
 
+    }
+
+    public Hashtag(String name) {
+        this.name = name;
     }
 }

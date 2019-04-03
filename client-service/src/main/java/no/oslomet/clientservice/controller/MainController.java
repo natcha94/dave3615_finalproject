@@ -1,7 +1,9 @@
 package no.oslomet.clientservice.controller;
 
+import no.oslomet.clientservice.model.Hashtag;
 import no.oslomet.clientservice.model.Tweet;
 import no.oslomet.clientservice.model.User;
+import no.oslomet.clientservice.service.HashtagService;
 import no.oslomet.clientservice.service.RoleService;
 import no.oslomet.clientservice.service.TweetService;
 import no.oslomet.clientservice.service.UserService;
@@ -15,7 +17,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class MainController {
@@ -25,7 +31,8 @@ public class MainController {
     private RoleService roleService;
     @Autowired
     private TweetService tweetService;
-
+    @Autowired
+    private HashtagService hashtagService;
     private User loggedInUser;
 
     @GetMapping("/")
