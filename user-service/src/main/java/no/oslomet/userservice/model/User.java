@@ -1,12 +1,5 @@
 package no.oslomet.userservice.model;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,14 +16,15 @@ public class User{
     private String email;
     private String userName;
     private String password;
-    //@JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="role_id")
     private Role roleId;
-/*    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
+    @Getter(AccessLevel.NONE)
     private List<Follower> followerList;
     @OneToMany(mappedBy = "user")
-    private List<Following> followingList;*/
+    @Getter(AccessLevel.NONE)
+    private List<Following> followingList;
 
     public User (){
 

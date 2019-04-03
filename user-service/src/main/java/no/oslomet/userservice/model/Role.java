@@ -1,6 +1,5 @@
 package no.oslomet.userservice.model;
 
-import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +13,6 @@ public class Role{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String roleName;
-    //@JsonBackReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "roleId", cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<User> userList = new ArrayList<>();
