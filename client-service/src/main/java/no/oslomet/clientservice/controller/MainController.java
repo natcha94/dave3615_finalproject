@@ -1,5 +1,6 @@
 package no.oslomet.clientservice.controller;
 
+import no.oslomet.clientservice.model.Tweet;
 import no.oslomet.clientservice.model.User;
 import no.oslomet.clientservice.service.RoleService;
 import no.oslomet.clientservice.service.TweetService;
@@ -12,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
+import java.util.Date;
 
 @Controller
 public class MainController {
@@ -82,4 +86,14 @@ public class MainController {
         userService.saveUser(adminUser);
         return "redirect:/";
     }
+
+    @PostMapping("/saveTweet")
+    public String saveTweet(@ModelAttribute("tweet")Tweet tweet){
+        tweet.setDate(new Date());
+        tweet.setUserId(loggedInUser.getId());
+        tweetService.saveTweet(tweet);
+        return "redirect:/home";
+    }
+
+
 }

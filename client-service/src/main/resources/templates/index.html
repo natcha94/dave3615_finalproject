@@ -41,7 +41,16 @@
 
 
 <div class="container">
-    <h4>All tickets</h4>
+    <h4>All tweets</h4>
+    <div class="row">
+        <div th:if="${user != null}"  class="col-sm-8 mx-auto">
+            <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet">
+                <div class="form-group">
+                    <input type="text" maxlength="140" name="text" class="form-control" id="exampleFormControlInput1" placeholder="What's happening?">
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-8 mx-auto " th:each="x : ${allTweets}">
             <p th:text="${x.text}" ></p> </br>

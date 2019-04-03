@@ -17,6 +17,7 @@ public class Tweet {
     private long id;
     @Temporal(TemporalType.DATE)
     private Date date;
+    @Column(length = 140)
     private String text;
     private long userId;
 
