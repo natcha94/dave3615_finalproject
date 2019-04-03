@@ -14,27 +14,27 @@ public class RetweetController {
 
     @GetMapping("/retweets")
     public List<Retweet> getAllRetweets() {
-        return retweetService.getAllBuldings();
+        return retweetService.getAllRetweets();
     }
 
     @GetMapping("/retweets/{id}")
     public Retweet getRetweetById(@PathVariable long id) {
-        return retweetService.getBuldingById(id);
+        return retweetService.getRetweetById(id);
     }
 
     @DeleteMapping("/retweets/{id}")
     public void deleteRetweetById(@PathVariable long id) {
-        retweetService.deleteBuldingById(id);
+        retweetService.deleteRetweetById(id);
     }
 
     @PostMapping("/retweets")
     public Retweet createRetweet(@RequestBody Retweet retweet) {
-        return retweetService.saveBulding(retweet);
+        return retweetService.saveRetweet(retweet);
     }
 
     @PutMapping("/retweets/{id}")
     public Retweet updateRetweet(@PathVariable long id, @RequestBody Retweet retweet) {
         retweet.setId(id);
-        return retweetService.saveBulding(retweet);
+        return retweetService.saveRetweet(retweet);
     }
 }

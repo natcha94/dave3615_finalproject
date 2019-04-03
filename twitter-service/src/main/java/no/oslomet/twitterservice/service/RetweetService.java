@@ -12,19 +12,19 @@ public class RetweetService {
     @Autowired
     private RetweetRepository retweetRepository;
 
-    public List<Retweet> getAllBuldings() {
+    public List<Retweet> getAllRetweets() {
         return retweetRepository.findAll();
     }
 
-    public Retweet getBuldingById(long id) {
+    public Retweet getRetweetById(long id) {
         return retweetRepository.findById(id).get();
     }
 
-    public Retweet saveBulding(Retweet retweet) {
+    public Retweet saveRetweet(Retweet retweet) {
         return retweetRepository.save(retweet);
     }
 
-    public void deleteBuldingById(long id) {
+    public void deleteRetweetById(long id) {
         retweetRepository.deleteById(id);
     }
 }

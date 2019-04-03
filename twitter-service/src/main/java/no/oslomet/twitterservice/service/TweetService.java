@@ -12,19 +12,19 @@ public class TweetService {
     @Autowired
     private TweetRepository tweetRepository;
 
-    public List<Tweet> getAllBuldings() {
+    public List<Tweet> getAllTweets() {
         return tweetRepository.findAll();
     }
 
-    public Tweet getBuldingById(long id) {
+    public Tweet getTweetById(long id) {
         return tweetRepository.findById(id).get();
     }
 
-    public Tweet saveBulding(Tweet tweet) {
+    public Tweet saveTweet(Tweet tweet) {
         return tweetRepository.save(tweet);
     }
 
-    public void deleteBuldingById(long id) {
+    public void deleteTweetById(long id) {
         tweetRepository.deleteById(id);
     }
 }

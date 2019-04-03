@@ -12,19 +12,19 @@ public class HashtagService {
     @Autowired
     private HashtagRepository hashtagRepository;
 
-    public List<Hashtag> getAllBuldings() {
+    public List<Hashtag> getAllHashtags() {
         return hashtagRepository.findAll();
     }
 
-    public Hashtag getBuldingById(long id) {
+    public Hashtag getHashtagById(long id) {
         return hashtagRepository.findById(id).get();
     }
 
-    public Hashtag saveBulding(Hashtag hashtag) {
+    public Hashtag saveHashtag(Hashtag hashtag) {
         return hashtagRepository.save(hashtag);
     }
 
-    public void deleteBuldingById(long id) {
+    public void deleteHashtagById(long id) {
         hashtagRepository.deleteById(id);
     }
 }

@@ -14,27 +14,27 @@ public class HashtagController {
 
     @GetMapping("/hashtags")
     public List<Hashtag> getAllHashtags() {
-        return hashtagService.getAllBuldings();
+        return hashtagService.getAllHashtags();
     }
 
     @GetMapping("/hashtags/{id}")
     public Hashtag getHashtagById(@PathVariable long id) {
-        return hashtagService.getBuldingById(id);
+        return hashtagService.getHashtagById(id);
     }
 
     @DeleteMapping("/hashtags/{id}")
     public void deleteHashtagById(@PathVariable long id) {
-        hashtagService.deleteBuldingById(id);
+        hashtagService.deleteHashtagById(id);
     }
 
     @PostMapping("/hashtags")
     public Hashtag createHashtag(@RequestBody Hashtag hashtag) {
-        return hashtagService.saveBulding(hashtag);
+        return hashtagService.saveHashtag(hashtag);
     }
 
     @PutMapping("/hashtags/{id}")
     public Hashtag updateHashtag(@PathVariable long id, @RequestBody Hashtag hashtag) {
         hashtag.setId(id);
-        return hashtagService.saveBulding(hashtag);
+        return hashtagService.saveHashtag(hashtag);
     }
 }

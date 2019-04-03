@@ -19,27 +19,27 @@ public class RestController {
 
     @GetMapping("/tweets")
     public List<Tweet> getAllTweets() {
-        return tweetService.getAllBuldings();
+        return tweetService.getAllTweets();
     }
 
     @GetMapping("/tweets/{id}")
     public Tweet getTweetById(@PathVariable long id) {
-        return tweetService.getBuldingById(id);
+        return tweetService.getTweetById(id);
     }
 
     @DeleteMapping("/tweets/{id}")
     public void deleteTweetById(@PathVariable long id) {
-        tweetService.deleteBuldingById(id);
+        tweetService.deleteTweetById(id);
     }
 
     @PostMapping("/tweets")
     public Tweet createTweet(@RequestBody Tweet tweet) {
-        return tweetService.saveBulding(tweet);
+        return tweetService.saveTweet(tweet);
     }
 
     @PutMapping("/tweets/{id}")
     public Tweet updateTweet(@PathVariable long id, @RequestBody Tweet tweet) {
         tweet.setId(id);
-        return tweetService.saveBulding(tweet);
+        return tweetService.saveTweet(tweet);
     }
 }
