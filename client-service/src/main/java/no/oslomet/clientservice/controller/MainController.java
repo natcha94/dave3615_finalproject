@@ -1,8 +1,8 @@
 package no.oslomet.clientservice.controller;
 
-import no.oslomet.clientservice.model.Role;
 import no.oslomet.clientservice.model.User;
 import no.oslomet.clientservice.service.RoleService;
+import no.oslomet.clientservice.service.TweetService;
 import no.oslomet.clientservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,12 +19,27 @@ public class MainController {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private TweetService tweetService;
 
     private User loggedInUser;
 
     @GetMapping("/")
-    public String home(){
+    public String home(Model model){
+        /*return "login";*/
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("allTweets", tweetService.getAllTweets());
+        return "index";
+    }
+
+    @GetMapping("/login")
+    public String login(){
         return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(){
+        return "logout";
     }
 
     @GetMapping("/home")
@@ -35,7 +50,8 @@ public class MainController {
         loggedInUser = user;
         if(user != null) model.addAttribute("user", loggedInUser);
         System.out.println("homePage2: " + loggedInUser.getUserName() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + auth.getName());
-
+        model.addAttribute("allTweets", tweetService.getAllTweets());
+        model.addAttribute("user", loggedInUser);
         return "index";
     }
 

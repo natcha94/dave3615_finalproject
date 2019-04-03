@@ -15,7 +15,7 @@ public class Tweet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @DateTimeFormat(pattern="dd/MM/yyyy")
+    @Temporal(TemporalType.DATE)
     private Date date;
     private String text;
     private long userId;

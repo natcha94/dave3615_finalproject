@@ -9,8 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@ToString
 public class Tweet {
     private long id;
     private Date date;
