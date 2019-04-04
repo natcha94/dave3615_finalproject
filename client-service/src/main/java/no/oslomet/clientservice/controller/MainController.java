@@ -15,13 +15,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 public class MainController {
@@ -33,7 +38,9 @@ public class MainController {
     private TweetService tweetService;
     @Autowired
     private HashtagService hashtagService;
+
     private User loggedInUser;
+    private String imageFolder = "C:\\Users\\mebix\\Documents\\Github\\dave3615_finalproject\\client-service\\src\\main\\resources\\static\\images\\";
 
     @GetMapping("/")
     public String home(Model model){
@@ -99,6 +106,31 @@ public class MainController {
         tweet.setDate(new Date());
         tweet.setUserId(loggedInUser.getId());
         tweetService.saveTweet(tweet);
+        return "redirect:/home";
+    }
+
+    @PostMapping("/uploadimage")
+    public String uploadImage(@RequestParam("file") MultipartFile[] file, RedirectAttributes redirectAttributes) {
+        System.out.println("uploadImage " + file.length);
+        if (file == null) {
+            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
+            return "redirect:/home";
+        }
+
+        Arrays.asList(file).forEach(afile -> {
+            byte[] bytes = new byte[0];
+            try {
+                bytes = afile.getBytes();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Path path = Paths.get(imageFolder + afile.getOriginalFilename());
+            try {
+                Files.write(path, bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         return "redirect:/home";
     }
 
