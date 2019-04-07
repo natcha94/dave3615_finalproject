@@ -1,3 +1,28 @@
 .justify-content-md-center {
     border: solid 1px yellowgreen;
 }
+body {
+    background-color: #E6ECF0;
+}
+
+.about-user-section {
+    background-color: #FFFFFF;
+    margin-right: 1em;
+    padding-top: 2em;
+}
+
+.tweets-section {
+    background-color: #FFFFFF;
+    padding-top: 2em;
+}
+
+.tweetcard {
+    width: 100%;
+    padding-top: 1em;
+    border-bottom: solid 1px #CDD3D8;
+}
+.avatar {
+    border-radius: 50%;
+    width: 5em;
+    border: solid 1px white;
+}

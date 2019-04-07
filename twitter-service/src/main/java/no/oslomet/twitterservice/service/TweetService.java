@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +27,14 @@ public class TweetService {
         return tweetRepository.findById(id).get();
     }
 
+    public List<Tweet> getTweetsByUserId(long id) {
+        List<Tweet> tweetList = new ArrayList<>();
+        getAllTweets().forEach(tw -> {
+            if(tw.getUserId() == id) tweetList.add(tw);
+        });
+        return tweetList;
+    }
+
     public Tweet saveTweet(Tweet tweet) {
         Pattern pattern = Pattern.compile("#\\S+");
         List<String> hashtags = new ArrayList<>();
@@ -41,6 +50,7 @@ public class TweetService {
                 tweet.getHashtags().add(new Hashtag(word));
             }
         });
+
         return tweetRepository.save(tweet);
     }
 

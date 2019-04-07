@@ -10,8 +10,9 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private String userName;
+    private String username;
     private String password;
+    private String profileImage = "/images/profileImage/avatar.png";
     private Role roleId;
     private List<Follower> followerList;
     private List<Following> followingList;

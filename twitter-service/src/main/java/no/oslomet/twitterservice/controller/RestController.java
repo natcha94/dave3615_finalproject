@@ -26,6 +26,10 @@ public class RestController {
     public Tweet getTweetById(@PathVariable long id) {
         return tweetService.getTweetById(id);
     }
+    @GetMapping("/tweets/user/{id}")
+    public List<Tweet> getTweetsByUserId(@PathVariable long id) {
+        return tweetService.getTweetsByUserId(id);
+    }
 
     @DeleteMapping("/tweets/{id}")
     public void deleteTweetById(@PathVariable long id) {

@@ -14,8 +14,9 @@ public class User{
     private String firstName;
     private String lastName;
     private String email;
-    private String userName;
+    private String username;
     private String password;
+    private String profileImage = "/images/profileImage/avatar.png";
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="role_id")
     private Role roleId;
@@ -34,7 +35,7 @@ public class User{
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
         this.roleId = role;
     }

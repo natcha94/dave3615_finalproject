@@ -28,6 +28,13 @@ public class TweetService {
         return tweet;
     }
 
+    public List<Tweet> getTweetsByUserId(long id)
+    {
+        return Arrays.stream(
+                restTemplate.getForObject(BASE_URL+"/user/"+id, Tweet[].class)
+        ).collect((Collectors.toList()));
+    }
+
     public Tweet saveTweet(Tweet newTweet)
     {
         return restTemplate.postForObject(BASE_URL, newTweet, Tweet.class);

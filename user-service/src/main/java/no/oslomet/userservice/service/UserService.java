@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public User getUserByUserName(String username){
-        Optional<User> user = userRepository.findUserByUserName((username));
+        Optional<User> user = userRepository.findUserByUsername((username));
         if(user.isPresent()){
             return user.get();
         }else{

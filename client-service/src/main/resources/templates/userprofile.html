@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -14,36 +21,31 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
-        <a class="navbar-brand" href="/home"><i class="fas fa-home"></i> Home</a>
-        <a class="navbar-brand" href="/home"><i class="far fa-bell"> </i>Notifications</a>
-        <a class="navbar-brand" href="/home"><i class="far fa-envelope"></i> Message</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+    <a class="navbar-brand" href="/home"><i class="fas fa-home"></i> Home</a>
+    <a class="navbar-brand" href="/home"><i class="far fa-bell"> </i>Notifications</a>
+    <a class="navbar-brand" href="/home"><i class="far fa-envelope"></i> Message</a>
 
-        <a class="navbar-brand" href="/home"><i class="fab fa-twitter"></i></a>
+    <a class="navbar-brand" href="/home"><i class="fab fa-twitter"></i></a>
 
-        <form th:action="@{/searching}" method="get" class="form-inline ">
-            <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search" name="searchinput">
-            <i class="fas fa-search" aria-hidden="true"></i>
-        </form>
+    <form th:action="@{/searching}" method="get" class="form-inline ">
+        <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search" name="searchinput">
+        <i class="fas fa-search" aria-hidden="true"></i>
+    </form>
 
-        <div th:if="${user != null}" class="col" style="right: -20%;">
-            <i class="fa fa-user fa-lg"></i>  <label th:text="${user.username}">   </label>
-            <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/loguserout">
-                Logout
-            </a>
-        </div>
-        <div class="col" th:if="${user == null}">
-            <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/login">
-                Login
-            </a>
-        </div>
+    <div class="col" style="right: -20%;">
+        <i class="fa fa-user fa-lg"></i>  <label th:text="${user.username}">   </label>
+        <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/logout">
+            Logout
+        </a>
+    </div>
 
-    </nav>
+</nav>
 
 
 <div class="container">
     <div class="row">
-        <div th:if="${user != null}" class="col-sm-3 about-user-section">
+        <div class="col-sm-3 about-user-section">
             <div class="row">
                 <div class="col-sm-4">
                     <img th:src="${user.profileImage}" alt="Avatar" class="avatar">
@@ -56,17 +58,16 @@
 
         </div>
         <div class="col-sm-8 tweets-section">
-            <div th:if="${user != null}">
+            <div>
                 <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet" enctype="multipart/form-data">
                     <div class="form-group">
                         <input type="text" maxlength="140" name="text" class="form-control" placeholder="What's happening?">
-                        <input type="file" name="files" multiple="multiple"/>
+                        <input type="file" name="image" multiple="multiple"/>
                         <div th:if="${message}">
                             <h2 th:text="${message}"/>
                         </div>
                     </div>
                 </form>
-            </div>
                 <div>
                     <div th:each="x : ${allTweets}">
                         <div class="tweetcard">
@@ -81,10 +82,12 @@
                 </div>
             </div>
 
+        </div>
     </div>
 </div>
-</div>
 
 
+</body>
+</html>
 </body>
 </html>

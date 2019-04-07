@@ -1,12 +1,9 @@
 package no.oslomet.clientservice.controller;
 
-import no.oslomet.clientservice.model.Hashtag;
+import com.sun.jmx.snmp.internal.SnmpSubSystem;
 import no.oslomet.clientservice.model.Tweet;
 import no.oslomet.clientservice.model.User;
-import no.oslomet.clientservice.service.HashtagService;
-import no.oslomet.clientservice.service.RoleService;
-import no.oslomet.clientservice.service.TweetService;
-import no.oslomet.clientservice.service.UserService;
+import no.oslomet.clientservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -55,11 +49,6 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("/logout")
-    public String logout(){
-        return "logout";
-    }
-
     @GetMapping("/home")
     public String homePage(Model model){
         System.out.println("homePage");
@@ -67,20 +56,27 @@ public class MainController {
         User user = userService.getUserByUserName(auth.getName());
         loggedInUser = user;
         if(user != null) model.addAttribute("user", loggedInUser);
-        System.out.println("homePage2: " + loggedInUser.getUserName() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + auth.getName());
+        System.out.println("homePage2: " + loggedInUser.getUsername() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + auth.getName());
         model.addAttribute("allTweets", tweetService.getAllTweets());
         model.addAttribute("user", loggedInUser);
         return "index";
     }
 
+    @GetMapping("/loguserout")
+    public String logout(){
+        System.out.println("logout");
+        loggedInUser = null;
+        return "logout";
+    }
+
     @GetMapping("/signup")
-    public String signup(Model model){
+    public String signup(){
         System.out.println("signup");
         return "signup";
     }
 
     @GetMapping("/signupAdmin")
-    public String signupAdmin(Model model){
+    public String signupAdmin(){
         System.out.println("signupAdmin");
         return "signupAdmin";
     }
@@ -102,21 +98,22 @@ public class MainController {
     }
 
     @PostMapping("/saveTweet")
-    public String saveTweet(@ModelAttribute("tweet")Tweet tweet){
-        tweet.setDate(new Date());
-        tweet.setUserId(loggedInUser.getId());
-        tweetService.saveTweet(tweet);
-        return "redirect:/home";
+    public String saveTweet(@ModelAttribute("tweet")Tweet tweet, @RequestParam("files") MultipartFile[] file, RedirectAttributes redirectAttributes){
+
+        if (file.length > 3) {
+            redirectAttributes.addFlashAttribute("message", "You can only upload 4 photos per tweet");
+            return "redirect:/home";
+        }else{
+            uploadImage(file,tweet);
+            tweet.setDate(new Date());
+            tweet.setUserId(loggedInUser.getId());
+            tweetService.saveTweet(tweet);
+        }
+        return "redirect:/userprofile";
     }
 
-    @PostMapping("/uploadimage")
-    public String uploadImage(@RequestParam("file") MultipartFile[] file, RedirectAttributes redirectAttributes) {
+    public void uploadImage(MultipartFile[] file, Tweet tweet) {
         System.out.println("uploadImage " + file.length);
-        if (file == null) {
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-            return "redirect:/home";
-        }
-
         Arrays.asList(file).forEach(afile -> {
             byte[] bytes = new byte[0];
             try {
@@ -125,14 +122,25 @@ public class MainController {
                 e.printStackTrace();
             }
             Path path = Paths.get(imageFolder + afile.getOriginalFilename());
+            System.out.println("afile.getOriginalFilename(): " + afile.getOriginalFilename().toUpperCase());
             try {
-                Files.write(path, bytes);
+                if(!afile.isEmpty()){
+                    Files.write(path, bytes);
+                    tweet.getImagePathList().add("/images/"+afile.getOriginalFilename());
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        return "redirect:/home";
     }
+
+    @GetMapping("/userprofile")
+    public String profilePage(Model model){
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("allTweets", tweetService.getTweetsByUserId(loggedInUser.getId()));
+        return "userprofile";
+    }
+
 
 
 }

@@ -1,8 +1,6 @@
 package no.oslomet.clientservice.model;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +12,7 @@ public class Tweet {
     private Date date;
     private String text;
     private long userId;
-    List<Retweet> retweets;
-    List<Hashtag> hashtags = new ArrayList<>();
+    private List<String> imagePathList = new ArrayList<>();
+    private List<Retweet> retweets = new ArrayList<>();
+    private List<Hashtag> hashtags = new ArrayList<>();
 }
