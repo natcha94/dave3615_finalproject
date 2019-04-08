@@ -17,7 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <title>Twitter - Home</title>
+    <title>Edit profile</title>
 </head>
 <body>
 
@@ -49,52 +49,49 @@
 
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-3 about-user-section">
-            <div class="row">
-                <div class="col-sm-4">
-                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar">
+    <div class="row justify-content-md-center mt-5">
+        <div class="col-6">
+            <form action="/updateuser" modelAttribute="user" method="post" enctype="multipart/form-data">
+                <input type="hidden"  th:value="${user.id}" name="id">
+                <div class="form-group">
+                    <label>First name</label>
+                    <input th:value="${user.firstName}" type="text" name="firstName" class="form-control" placeholder="First Name">
                 </div>
-                <div class="col-sm-8">
-                    <a class="navbar-brand" href="/userprofile"><p th:text="${user.firstName} + ' ' + ${user.lastName}"></p></a>
-                    <p th:text="'@'+${user.username}"></p>
+                <div class="form-group">
+                    <label>Last name</label>
+                    <input th:value="${user.lastName}" type="text" name="lastName" class="form-control" placeholder="Last Name">
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <a class="btn my-2 my-sm-0 mx-5 setting-btn" href="/editprofile">
-                        Edit profile
-                    </a>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input th:value="${user.email}" type="email"  name="email" class="form-control" placeholder="Email">
                 </div>
-            </div>
-        </div>
-        <div class="col-sm-8 tweets-section">
-            <div>
-                <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <input type="text" maxlength="140" name="text" class="form-control" placeholder="What's happening?">
-                        <input type="file" name="files" multiple="multiple"/>
-                        <div th:if="${message}">
-                            <h2 th:text="${message}"/>
-                        </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input th:value="${user.username}" type="text"  name="username" class="form-control" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input th:value="${user.password}" type="password"  name="password" class="form-control" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label>Profile picture</label>
+                    <input type="file" name="file"/>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a class="btn btn-outline-success my-2 my-sm-0 mx-5" th:href="@{/deleteaccount/}+${user.id}">
+                            Delete account
+                        </a>
                     </div>
-                </form>
-                <div>
-                    <div th:each="x : ${allTweets}">
-                        <div class="tweetcard">
-                            <div class="col-md-auto" th:each="img : ${x.imagePathList}">
-                                <img th:src="${img}">
-                            </div>
-                            <p th:text="${x.text}" ></p> </br>
-                        </div>
-
+                    <div class="col-sm-6">
+                        <button class="btn btn-success btn-lg btn-block mt-3">Save changes</button>
                     </div>
-
                 </div>
-            </div>
-
+            </form>
         </div>
     </div>
+
 </div>
 
 

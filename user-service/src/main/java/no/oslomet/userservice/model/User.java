@@ -16,8 +16,8 @@ public class User{
     private String email;
     private String username;
     private String password;
-    private String profileImage = "/images/profileImage/avatar.png";
-    @ManyToOne(cascade = CascadeType.ALL)
+    private String profileImage = "/images/profileImage/DefaultAvatar/Twitter-Default-Avatar.png";
+    @ManyToOne
     @JoinColumn(name="role_id")
     private Role roleId;
     @OneToMany(mappedBy = "user")

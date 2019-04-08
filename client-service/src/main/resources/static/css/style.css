@@ -26,3 +26,25 @@ body {
     width: 5em;
     border: solid 1px white;
 }
+
+.avatar-header {
+    border-radius: 50%;
+    width: 2em;
+    float: right;
+}
+
+.logout-user-section{
+    width: 100%;
+}
+
+.logout-user-section > .col-sm-1 > .btn {
+    margin: 0 auto !important;;
+}
+
+.setting-btn{
+    border-radius: 16px;
+    border-color: #87939B;
+    font-weight: 600;
+    font-size: 13px;
+    color: #6E7D86;
+}

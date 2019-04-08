@@ -26,11 +26,17 @@
             <i class="fas fa-search" aria-hidden="true"></i>
         </form>
 
-        <div th:if="${user != null}" class="col" style="right: -20%;">
-            <i class="fa fa-user fa-lg"></i>  <label th:text="${user.username}">   </label>
-            <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/loguserout">
-                Logout
-            </a>
+        <div th:if="${user != null}" class="row logout-user-section">
+            <div class="col-sm-11">
+                <a href="/userprofile">
+                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
+                </a>
+            </div>
+            <div class="col-sm-1">
+                <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/loguserout">
+                    Logout
+                </a>
+            </div>
         </div>
         <div class="col" th:if="${user == null}">
             <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/login">
@@ -53,7 +59,13 @@
                     <p th:text="'@'+${user.username}"></p>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-sm-12">
+                    <a class="btn my-2 my-sm-0 mx-5 setting-btn" href="/editprofile">
+                        Edit profile
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="col-sm-8 tweets-section">
             <div th:if="${user != null}">

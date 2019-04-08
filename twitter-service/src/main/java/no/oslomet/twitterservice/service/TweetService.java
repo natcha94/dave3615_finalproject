@@ -57,4 +57,12 @@ public class TweetService {
     public void deleteTweetById(long id) {
         tweetRepository.deleteById(id);
     }
+
+    public void deleteTweetByUserId(long userid)
+    {
+        getAllTweets().forEach(tw -> {
+            if (tw.getUserId() == userid) tweetRepository.deleteById(tw.getId());
+        });
+
+    }
 }

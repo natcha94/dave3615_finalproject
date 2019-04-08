@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService{
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     String BASE_URL = "http://localhost:9090/users";
     private RestTemplate restTemplate = new RestTemplate();
@@ -35,7 +33,6 @@ public class UserService{
     {
         System.out.println("saveUser");
         System.out.println(newUser.getRoleId().getRoleName());
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         return restTemplate.postForObject(BASE_URL, newUser, User.class);
     }
 
