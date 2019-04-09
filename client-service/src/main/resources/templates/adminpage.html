@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <title>Twitter - Home</title>
+    <title>Twitter / Admin</title>
 </head>
 <body>
 
@@ -54,49 +54,32 @@
 
 <div class="container">
     <div class="row">
-        <div th:if="${user != null}" class="col-sm-3 about-user-section">
-            <div class="row">
-                <div class="col-sm-4">
-                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar">
+        <div class="col-sm-8 tweets-section">
+            <div>
+                <div th:each="x : ${allUsers}">
+                    <div class="tweetcard">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <img th:src="${x.profileImage}" alt="Avatar" class="avatar">
+                            </div>
+                            <div class="col-sm-8">
+                                <p th:text="${user.firstName} + ' ' + ${user.lastName}"></p>
+                                <p th:text="'@'+${user.username}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a class="btn my-2 my-sm-0 mx-5 setting-btn" th:href="@{/editprofile/}+${x.id}">
+                                    Edit profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="col-sm-8">
-                    <a class="navbar-brand" href="/userprofile"><p th:text="${user.firstName} + ' ' + ${user.lastName}"></p></a>
-                    <p th:text="'@'+${user.username}"></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <a class="btn my-2 my-sm-0 mx-5 setting-btn" href="/editprofile">
-                        Edit profile
-                    </a>
-                </div>
+
             </div>
         </div>
-        <div class="col-sm-8 tweets-section">
-            <div th:if="${user != null}">
-                <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <input type="text" maxlength="140" name="text" class="form-control" placeholder="What's happening?">
-                        <input type="file" name="files" multiple="multiple"/>
-                        <div th:if="${message}">
-                            <h2 th:text="${message}"/>
-                        </div>
-                    </div>
-                </form>
-            </div>
-                <div>
-                    <div th:each="x : ${allTweets}">
-                        <div class="tweetcard">
-                            <div class="col-md-auto" th:each="img : ${x.imagePathList}">
-                                <img th:src="${img}">
-                            </div>
-                            <p th:text="${x.text}" ></p> </br>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
 
     </div>
 </div>

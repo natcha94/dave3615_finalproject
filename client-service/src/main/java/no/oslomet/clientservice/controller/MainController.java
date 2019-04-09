@@ -146,6 +146,12 @@ public class MainController {
         return "edituserprofile";
     }
 
+    @GetMapping("/editprofile/{id}")
+    public String editOtherUserProfile(@PathVariable long id, Model model){
+        model.addAttribute("user", userService.getUserById(id));
+        return "edituserprofile";
+    }
+
     @GetMapping("/deleteaccount/{id}")
     public String deleteAccount(@PathVariable long id){
         System.out.println("deleteAccount");
@@ -181,5 +187,11 @@ public class MainController {
         }
     }
 
+    @GetMapping("/adminpage")
+    public String adminPage(Model model){
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("allUsers", userService.getAllUsers());
+        return "adminpage";
+    }
 
 }

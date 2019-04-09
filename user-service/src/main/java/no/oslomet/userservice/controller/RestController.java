@@ -19,10 +19,10 @@ public class RestController {
         return userService.getAllUsers();
     }
 
-/*    @GetMapping("/users/{id}")
+    @GetMapping("/users/id/{id}")
     public User getUserById(@PathVariable long id){
         return userService.getUserById(id);
-    }*/
+    }
 
     @DeleteMapping("/users/{id}")
     public void deleteUserById(@PathVariable long id){

@@ -29,6 +29,12 @@ public class UserService{
         return user;
     }
 
+    public User getUserById(long id)
+    {
+        User user = restTemplate.getForObject(BASE_URL+"/id/"+id, User.class);
+        return user;
+    }
+
     public User saveUser(User newUser)
     {
         System.out.println("saveUser");
