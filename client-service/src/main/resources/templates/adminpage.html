@@ -32,8 +32,8 @@
                     <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
                 </a>
                 <ul id="popover-content" class="list-group" style="display: none">
-                    <a href="/userprofile" class="list-group-item"><i class="far fa-user"></i> Profile</a>
-                    <a href="/editprofile" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
+                    <a th:href="@{/userprofile/}+${user.id}" class="list-group-item"><i class="far fa-user"></i> Profile</a>
+                    <a th:href="@{/editprofile/}+${user.id}" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
                     <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
                     <a href="/loguserout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
                 </ul>

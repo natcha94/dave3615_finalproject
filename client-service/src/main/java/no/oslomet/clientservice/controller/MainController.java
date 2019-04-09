@@ -152,21 +152,26 @@ public class MainController {
         });
     }
 
-    @GetMapping("/userprofile")
+/*    @GetMapping("/userprofile")
     public String profilePage(Model model){
         model.addAttribute("user", loggedInUser);
+        model.addAttribute("disableFollowingBtn", true);
+        model.addAttribute("disableEditBtn", true);
         model.addAttribute("allTweets", tweetService.getTweetsByUserId(loggedInUser.getId()));
         model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(loggedInUser.getId()).size());
-        model.addAttribute("allFollowing", new ArrayList<>());
+        model.addAttribute("allFollowing", followingList);
         model.addAttribute("userlist", userService.getAllUsers());
         model.addAttribute("localdatetime", LocalDateTime.now());
 
         return "userprofile";
-    }
+    }*/
 
     @GetMapping("/userprofile/{id}")
-    public String otherUserProfilePage(@PathVariable long id, Model model){
+    public String profilePage(@PathVariable long id, Model model){
         model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("disableFollowingBtn", id == loggedInUser.getId() ? true : false);
+        model.addAttribute("disableEditBtn", id == loggedInUser.getId() ? true : false);
+        model.addAttribute("isFollowing", checkIfFollowing(id));
         model.addAttribute("allTweets", tweetService.getTweetsByUserId(id));
         model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(id).size());
         model.addAttribute("allFollowing", new ArrayList<>());
@@ -175,14 +180,21 @@ public class MainController {
         return "userprofile";
     }
 
-    @GetMapping("/editprofile")
+    public boolean checkIfFollowing(long id){
+        for (Following x : followingService.getFollowingByOwnerId(loggedInUser.getId())) {
+            if (x.getUser().getId() == id) return true;
+        }
+        return false;
+    }
+
+/*    @GetMapping("/editprofile")
     public String editProfile(Model model){
         model.addAttribute("user", loggedInUser);
         return "edituserprofile";
-    }
+    }*/
 
     @GetMapping("/editprofile/{id}")
-    public String editOtherUserProfile(@PathVariable long id, Model model){
+    public String editProfile(@PathVariable long id, Model model){
         model.addAttribute("user", userService.getUserById(id));
         return "edituserprofile";
     }
@@ -248,12 +260,16 @@ public class MainController {
     @GetMapping("/allfollowing/{id}")
     public String getAllFollowing(@PathVariable long id, Model model){
         System.out.println("getAllFollowing");
-        List<User> followings = new ArrayList<>();
-        followingService.getFollowingByOwnerId(id).forEach(x -> followings.add(x.getUser()));
-        followings.forEach(x -> System.out.println("users: " + x.getUsername()));
-        model.addAttribute("allFollowing", followings);
-        model.addAttribute("user", loggedInUser);
-        model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(loggedInUser.getId()).size());
+        List<User> followingList = new ArrayList<>();
+        followingService.getFollowingByOwnerId(id).forEach(x -> followingList.add(x.getUser()));
+
+        model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("disableFollowingBtn", id == loggedInUser.getId() ? true : false);
+        model.addAttribute("disableEditBtn", id == loggedInUser.getId() ? true : false);
+        model.addAttribute("isFollowing", checkIfFollowing(id));
+        model.addAttribute("allTweets", tweetService.getTweetsByUserId(id));
+        model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(id).size());
+        model.addAttribute("allFollowing", followingList);
         model.addAttribute("userlist", userService.getAllUsers());
         model.addAttribute("localdatetime", LocalDateTime.now());
         return "userprofile";

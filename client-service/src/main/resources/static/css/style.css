@@ -65,3 +65,8 @@ body {
 .follow-section{
     padding-top: 1em;
 }
+
+.disabled-following-btn{
+    pointer-events: none;
+    cursor: default;
+}

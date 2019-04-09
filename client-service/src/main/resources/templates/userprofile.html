@@ -39,8 +39,8 @@
                     <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
                 </a>
                 <ul id="popover-content" class="list-group" style="display: none">
-                    <a href="/userprofile" class="list-group-item"><i class="far fa-user"></i> Profile</a>
-                    <a href="/editprofile" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
+                    <a th:href="@{/userprofile/}+${user.id}" class="list-group-item"><i class="far fa-user"></i> Profile</a>
+                    <a th:href="@{/editprofile/}+${user.id}" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
                     <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
                     <a href="/loguserout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
                 </ul>
@@ -64,34 +64,37 @@
                         <img th:src="${user.profileImage}" alt="Avatar" class="avatar">
                     </div>
                     <div class="col-sm-8">
-                        <a class="navbar-brand" href="/userprofile"><p style="font-size: 20px; color: #14171A; font-weight: bolder" th:text="${user.firstName} + ' ' + ${user.lastName}"></p></a>
+                        <a class="navbar-brand" th:href="@{/userprofile/}+${user.id}"><p style="font-size: 20px; color: #14171A; font-weight: bolder" th:text="${user.firstName} + ' ' + ${user.lastName}"></p></a>
                         <p style="color: #87939B" th:text="'@'+${user.username}"></p>
                     </div>
                 </div>
                 <div class="row follow-section">
                     <div class="col-sm-6">
-                        <a th:href="@{/allfollowing/}+${user.id}" ><p style="font-weight: 700; padding-right: 0.5em; color: #657786 ;" th:text="'Following: ' + ${numberOfFollowing}"></p></a>
+                        <a th:href="@{/allfollowing/}+${user.id}"><p style="font-weight: 700; padding-right: 0.5em; color: #657786 ;" th:text="'Following: ' + ${numberOfFollowing}"></p></a>
                     </div>
                     <div class="col-sm-6">
                         <a th:href="@{/allfollowing/}+${user.id}" ><p style="font-weight: 700; padding-right: 0.5em; color: #657786;" th:text="'Follower: ' + ${numberOfFollowing}"></p></a>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-8">
-                        <a class="btn setting-btn" href="/editprofile">
+                    <div class="col-sm-7">
+                        <a th:if="${disableEditBtn}" class="btn setting-btn" th:href="@{/editprofile/}+${user.id}">
                             Edit profile
                         </a>
                     </div>
-                    <div class="col-sm-4">
-                        <a class="btn setting-btn" th:href="@{/follow/}+${user.id}">
+                    <div class="col-sm-5">
+                        <a th:if="${!disableFollowingBtn && !isFollowing}" class="btn setting-btn" th:href="@{/follow/}+${user.id}">
                             Follow
+                        </a>
+                        <a th:if="${isFollowing}" class="btn setting-btn disabled-following-btn" th:href="@{/follow/}+${user.id}">
+                            Following
                         </a>
                     </div>
                 </div>
 
             </div>
             <div class="col-sm-8 tweets-section">
-                <div th:if="${!allFollowing.isEmpty()}">
+                <div>
                     <div th:each="x : ${allFollowing}">
                         <div class="tweetcard">
                             <div class="row">
