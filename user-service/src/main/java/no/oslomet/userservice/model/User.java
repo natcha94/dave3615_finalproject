@@ -2,6 +2,7 @@ package no.oslomet.userservice.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,9 +24,9 @@ public class User{
     @OneToMany(mappedBy = "user")
     @Getter(AccessLevel.NONE)
     private List<Follower> followerList;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
-    private List<Following> followingList;
+    private List<Following> followingList = new ArrayList<>();
 
     public User (){
 

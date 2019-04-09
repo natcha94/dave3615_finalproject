@@ -44,6 +44,11 @@ body {
     position: relative;
 }
 
+.avatar-tweetcard{
+    border-radius: 50%;
+    width: 3em;
+}
+
 .logout-user-section{
     width: 100%;
     text-align: right;
@@ -55,4 +60,8 @@ body {
     font-weight: 600;
     font-size: 13px;
     color: #6E7D86;
+}
+
+.follow-section{
+    padding-top: 1em;
 }

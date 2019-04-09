@@ -1,5 +1,6 @@
 package no.oslomet.clientservice.controller;
 
+import no.oslomet.clientservice.model.Following;
 import no.oslomet.clientservice.model.Tweet;
 import no.oslomet.clientservice.model.User;
 import no.oslomet.clientservice.service.*;
@@ -31,6 +32,8 @@ public class MainController {
     @Autowired
     private HashtagService hashtagService;
     @Autowired
+    private FollowingService followingService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private User loggedInUser;
@@ -42,6 +45,7 @@ public class MainController {
         model.addAttribute("user", loggedInUser);
         model.addAttribute("userlist", userService.getAllUsers());
         model.addAttribute("allTweets", sortTweetByDateTime(tweetService.getAllTweets()));
+        model.addAttribute("localdatetime", LocalDateTime.now());
         return "index";
     }
 
@@ -152,6 +156,22 @@ public class MainController {
     public String profilePage(Model model){
         model.addAttribute("user", loggedInUser);
         model.addAttribute("allTweets", tweetService.getTweetsByUserId(loggedInUser.getId()));
+        model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(loggedInUser.getId()).size());
+        model.addAttribute("allFollowing", new ArrayList<>());
+        model.addAttribute("userlist", userService.getAllUsers());
+        model.addAttribute("localdatetime", LocalDateTime.now());
+
+        return "userprofile";
+    }
+
+    @GetMapping("/userprofile/{id}")
+    public String otherUserProfilePage(@PathVariable long id, Model model){
+        model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("allTweets", tweetService.getTweetsByUserId(id));
+        model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(id).size());
+        model.addAttribute("allFollowing", new ArrayList<>());
+        model.addAttribute("userlist", userService.getAllUsers());
+        model.addAttribute("localdatetime", LocalDateTime.now());
         return "userprofile";
     }
 
@@ -214,6 +234,29 @@ public class MainController {
         model.addAttribute("user", loggedInUser);
         model.addAttribute("allUsers", userService.getAllUsers());
         return "adminpage";
+    }
+
+    @GetMapping("/follow/{id}")
+    public String followAUser(@PathVariable long id, Model model){
+        System.out.println("followAUser");
+        loggedInUser.getFollowingList().add(new Following(loggedInUser.getId(), userService.getUserById(id)));
+        userService.saveUser(loggedInUser);
+        model.addAttribute("user", userService.getUserById(id));
+        return "redirect:/";
+    }
+
+    @GetMapping("/allfollowing/{id}")
+    public String getAllFollowing(@PathVariable long id, Model model){
+        System.out.println("getAllFollowing");
+        List<User> followings = new ArrayList<>();
+        followingService.getFollowingByOwnerId(id).forEach(x -> followings.add(x.getUser()));
+        followings.forEach(x -> System.out.println("users: " + x.getUsername()));
+        model.addAttribute("allFollowing", followings);
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(loggedInUser.getId()).size());
+        model.addAttribute("userlist", userService.getAllUsers());
+        model.addAttribute("localdatetime", LocalDateTime.now());
+        return "userprofile";
     }
 
 }

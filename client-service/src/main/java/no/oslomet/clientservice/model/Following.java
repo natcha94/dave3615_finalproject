@@ -1,13 +1,21 @@
 package no.oslomet.clientservice.model;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
-@NoArgsConstructor
-@ToString
 public class Following {
     private long id;
+    private long ownerId;
     private User user;
+
+    public Following ()
+    {
+
+    }
+
+    public Following (long ownerId, User user)
+    {
+        this.ownerId = ownerId;
+        this.user = user;
+    }
 }

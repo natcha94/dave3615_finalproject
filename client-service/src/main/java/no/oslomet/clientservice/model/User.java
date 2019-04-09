@@ -2,6 +2,7 @@ package no.oslomet.clientservice.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,11 +16,10 @@ public class User {
     private String profileImage = "/images/profileImage/DefaultAvatar/Twitter-Default-Avatar.png";
     private Role roleId;
     private List<Follower> followerList;
-    private List<Following> followingList;
+    private List<Following> followingList = new ArrayList<>();
 
     public User(){
 
     }
-
 
 }

@@ -87,17 +87,22 @@
                 </div>
                 <div>
                     <div th:each="x : ${allTweets}">
-                        <div class="tweetcard">
-                            <div class="col-md-auto" th:each="img : ${x.imagePathList}">
-                                <img th:src="${img}">
+                        <div class="row tweetcard">
+                            <div class="col-sm-1">
+                                <img th:each="y : ${userlist}" th:if="${x.userId == y.id}" th:src="${y.profileImage}" alt="Avatar" class="avatar-tweetcard">
                             </div>
-                            <div class="row" style="margin-left: 0 !important;" th:each="y : ${userlist}">
-                                <p style="font-weight: bolder; padding-right: 0.5em;"  th:if="${x.userId == y.id}"  th:text="${y.firstName} + ' ' + ${y.lastName}" ></p>
-                                <p style="color: #87939B" th:if="${x.userId == y.id}" th:with="result=${localdatetime.getHour() - x.getDateTime().getHour()}" th:text="'@'+${y.username} + ' - ' + ${result} + 'h' "></p>
+                            <div class="col-sm-11">
+                                <div class="col-md-auto" th:each="img : ${x.imagePathList}">
+                                    <img th:src="${img}">
+                                </div>
+                                <div class="row" style="margin-left: 0 !important;" th:each="y : ${userlist}">
+                                    <a th:href="@{/userprofile/}+${x.userId}" ><p th:if="${x.userId == y.id}" style="font-weight: bolder; padding-right: 0.5em; color: #14171A;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
+                                    <p style="color: #87939B" th:if="${x.userId == y.id}" th:with="result=${localdatetime.getHour() - x.getDateTime().getHour()}" th:text="'@'+${y.username} + ' - ' + ${result} + 'h' "></p>
+                                </div>
+
+                                <p th:text="${x.text}" ></p> </br>
+
                             </div>
-
-                            <p th:text="${x.text}" ></p> </br>
-
                         </div>
 
                     </div>

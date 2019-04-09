@@ -18,6 +18,11 @@ public class FollowingController {
         return followingService.getAllFollowings();
     }
 
+    @GetMapping("/followings/owner/{id}")
+    public List<Following> getFollowingByOwnerId(@PathVariable long id){
+        return followingService.getFollowingsByOwnerId(id);
+    }
+
     @GetMapping("/followings/{id}")
     public Following getFollowingById(@PathVariable long id){
         return followingService.getFollowingById(id);

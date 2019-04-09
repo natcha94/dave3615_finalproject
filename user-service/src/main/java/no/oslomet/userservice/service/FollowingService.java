@@ -5,6 +5,8 @@ import no.oslomet.userservice.repository.FollowingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -18,6 +20,15 @@ public class FollowingService {
 
     public Following getFollowingById(long id){
         return followingRepository.findById(id).get();
+    }
+
+    public List<Following> getFollowingsByOwnerId(long id)
+    {
+        List<Following> followingList = new ArrayList<>();
+        followingRepository.findAll().forEach(x -> {
+            if(x.getOwnerId() == id) followingList.add(x);
+        });
+        return followingList;
     }
 
     public Following saveFollowing(Following newFollowing){
