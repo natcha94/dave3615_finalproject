@@ -3,12 +3,17 @@
 }
 body {
     background-color: #E6ECF0;
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 .about-user-section {
     background-color: #FFFFFF;
     margin-right: 1em;
     padding-top: 2em;
+    font-size: 14px;
+    color: #657786;
+    line-height: 14px;
+    text-align: left;
 }
 
 .tweets-section {
@@ -20,6 +25,12 @@ body {
     width: 100%;
     padding-top: 1em;
     border-bottom: solid 1px #CDD3D8;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    text-decoration: none solid rgb(20, 23, 26);
+    text-align: left;
+    color: #14171a;
 }
 .avatar {
     border-radius: 50%;
@@ -30,15 +41,12 @@ body {
 .avatar-header {
     border-radius: 50%;
     width: 2em;
-    float: right;
+    position: relative;
 }
 
 .logout-user-section{
     width: 100%;
-}
-
-.logout-user-section > .col-sm-1 > .btn {
-    margin: 0 auto !important;;
+    text-align: right;
 }
 
 .setting-btn{

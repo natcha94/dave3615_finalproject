@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -27,21 +28,18 @@
         </form>
 
         <div th:if="${user != null}" class="row logout-user-section">
-            <div class="col-sm-2" th:if="${user.getRoleId().getRoleName() == 'Admin'}">
-                <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/adminpage">
-                    Admin
-                </a>
-            </div>
-            <div class="col-sm-9">
-                <a href="/userprofile">
+            <div class="col-sm-12">
+                <a href="#" data-toggle="popover" th:title="${user.firstName}" data-placement="bottom">
                     <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
                 </a>
+                <ul id="popover-content" class="list-group" style="display: none">
+                    <a href="/userprofile" class="list-group-item"><i class="far fa-user"></i> Profile</a>
+                    <a href="/editprofile" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
+                    <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
+                    <a href="/loguserout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
+                </ul>
             </div>
-            <div class="col-sm-1">
-                <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/loguserout">
-                    Logout
-                </a>
-            </div>
+
         </div>
         <div class="col" th:if="${user == null}">
             <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/login">
@@ -52,56 +50,62 @@
     </nav>
 
 
-<div class="container">
-    <div class="row">
-        <div th:if="${user != null}" class="col-sm-3 about-user-section">
-            <div class="row">
-                <div class="col-sm-4">
-                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar">
-                </div>
-                <div class="col-sm-8">
-                    <a class="navbar-brand" href="/userprofile"><p th:text="${user.firstName} + ' ' + ${user.lastName}"></p></a>
-                    <p th:text="'@'+${user.username}"></p>
-                </div>
+    <div class="container">
+        <div class="row">
+            <div th:if="${deletemessage}">
+                <h2 th:text="${deletemessage}"/>
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <a class="btn my-2 my-sm-0 mx-5 setting-btn" href="/editprofile">
-                        Edit profile
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-8 tweets-section">
-            <div th:if="${user != null}">
-                <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <input type="text" maxlength="140" name="text" class="form-control" placeholder="What's happening?">
-                        <input type="file" name="files" multiple="multiple"/>
-                        <div th:if="${message}">
-                            <h2 th:text="${message}"/>
-                        </div>
+            <div th:if="${user != null}" class="col-sm-3 about-user-section">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <img th:src="${user.profileImage}" alt="Avatar" class="avatar">
                     </div>
-                </form>
+                    <div class="col-sm-8">
+                        <a class="navbar-brand" href="/userprofile"><p style="font-size: 20px; color: #14171A; font-weight: bolder" th:text="${user.firstName} + ' ' + ${user.lastName}"></p></a>
+                        <p style="color: #87939B" th:text="'@'+${user.username}"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn my-2 my-sm-0 mx-5 setting-btn" href="/editprofile">
+                            Edit profile
+                        </a>
+                    </div>
+                </div>
             </div>
+            <div class="col-sm-8 tweets-section">
+                <div th:if="${user != null}">
+                    <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="text" maxlength="140" name="text" class="form-control" placeholder="What's happening?">
+                            <input type="file" name="files" multiple="multiple"/>
+                            <div th:if="${message}">
+                                <h2 th:text="${message}"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <div>
                     <div th:each="x : ${allTweets}">
                         <div class="tweetcard">
                             <div class="col-md-auto" th:each="img : ${x.imagePathList}">
                                 <img th:src="${img}">
                             </div>
+                            <div class="row" style="margin-left: 0 !important;" th:each="y : ${userlist}">
+                                <p style="font-weight: bolder; padding-right: 0.5em;"  th:if="${x.userId == y.id}"  th:text="${y.firstName} + ' ' + ${y.lastName}" ></p>
+                                <p style="color: #87939B" th:if="${x.userId == y.id}" th:with="result=${localdatetime.getHour() - x.getDateTime().getHour()}" th:text="'@'+${y.username} + ' - ' + ${result} + 'h' "></p>
+                            </div>
+
                             <p th:text="${x.text}" ></p> </br>
+
                         </div>
 
                     </div>
-
                 </div>
+
             </div>
-
+        </div>
     </div>
-</div>
-</div>
-
-
+<script src="../static/js/myScript.js" th:src="@{/js/myScript.js}"></script>
 </body>
 </html>

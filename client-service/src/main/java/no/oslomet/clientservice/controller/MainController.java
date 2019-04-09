@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +40,8 @@ public class MainController {
     public String home(Model model){
         /*return "login";*/
         model.addAttribute("user", loggedInUser);
-        model.addAttribute("allTweets", tweetService.getAllTweets());
+        model.addAttribute("userlist", userService.getAllUsers());
+        model.addAttribute("allTweets", sortTweetByDateTime(tweetService.getAllTweets()));
         return "index";
     }
 
@@ -55,16 +58,26 @@ public class MainController {
         loggedInUser = user;
         if(user != null) model.addAttribute("user", loggedInUser);
         System.out.println("homePage2: " + loggedInUser.getUsername() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + loggedInUser.getPassword() + ", " + loggedInUser.getProfileImage());
-        model.addAttribute("allTweets", tweetService.getAllTweets());
+        model.addAttribute("userlist", userService.getAllUsers());
+        model.addAttribute("allTweets", sortTweetByDateTime(tweetService.getAllTweets()));
         model.addAttribute("user", loggedInUser);
+        model.addAttribute("localdatetime", LocalDateTime.now());
+        /*int t = LocalDateTime.now().getHour() - tweetService.getTweetById(1).getDateTime().getHour();*/
+
         return "index";
+    }
+
+    public List<Tweet> sortTweetByDateTime (List<Tweet> tweetList){
+        tweetList.sort(Comparator.comparing(Tweet::getDateTime));
+        Collections.reverse(tweetList);
+        return tweetList;
     }
 
     @GetMapping("/loguserout")
     public String logout(){
         System.out.println("logout");
         loggedInUser = null;
-        return "logout";
+        return "redirect:/";
     }
 
     @GetMapping("/signup")
@@ -92,23 +105,26 @@ public class MainController {
     public String registerAdmin(@ModelAttribute("user") User adminUser){
         System.out.println("processRegistrationAdmin");
         adminUser.setRoleId(roleService.getRoleById(2));
+        adminUser.setPassword(passwordEncoder.encode(adminUser.getPassword()));
         userService.saveUser(adminUser);
         return "redirect:/";
     }
 
     @PostMapping("/saveTweet")
-    public String saveTweet(@ModelAttribute("tweet")Tweet tweet, @RequestParam("files") MultipartFile[] file, RedirectAttributes redirectAttributes){
+    public String saveTweet(@ModelAttribute("tweet")Tweet tweet, @RequestParam("files") MultipartFile[] file, RedirectAttributes redirectAttributes) throws ParseException {
 
         if (file.length > 3) {
             redirectAttributes.addFlashAttribute("message", "You can only upload 4 photos per tweet");
             return "redirect:/home";
         }else{
+
             uploadImage(file,tweet);
-            tweet.setDate(new Date());
+            tweet.setDateTime(LocalDateTime.now());
+            System.out.println("getDateTime: " + tweet.getDateTime());
             tweet.setUserId(loggedInUser.getId());
             tweetService.saveTweet(tweet);
         }
-        return "redirect:/userprofile";
+        return "redirect:/";
     }
 
     public void uploadImage(MultipartFile[] file, Tweet tweet) {
@@ -121,7 +137,6 @@ public class MainController {
                 e.printStackTrace();
             }
             Path path = Paths.get(imageFolder + afile.getOriginalFilename());
-            System.out.println("afile.getOriginalFilename(): " + afile.getOriginalFilename().toUpperCase());
             try {
                 if(!afile.isEmpty()){
                     Files.write(path, bytes);
@@ -153,19 +168,23 @@ public class MainController {
     }
 
     @GetMapping("/deleteaccount/{id}")
-    public String deleteAccount(@PathVariable long id){
+    public String deleteAccount(@PathVariable long id, RedirectAttributes redirectAttributes){
         System.out.println("deleteAccount");
+        String userToDelete = userService.getUserById(id).getUsername();
         tweetService.deleteTweetByUserId(id);
         userService.deleteUser(id);
-        loggedInUser = null;
-        return "redirect:/";
+        loggedInUser = loggedInUser.getId() == id ? (null) : (loggedInUser);
+        redirectAttributes.addFlashAttribute("deletemessage", loggedInUser != null ?
+                (userToDelete + " profile has been deleted.") : ("Your profile has been deleted."));
+        return loggedInUser != null ? "redirect:/adminpage" :  "redirect:/";
     }
 
     @PostMapping("/updateuser")
-    public String updateUser(@ModelAttribute("user") User editedUser, @RequestParam("file") MultipartFile file){
-        System.out.println("updateUser");
+    public String updateUser(@ModelAttribute("user") User editedUser, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
+        System.out.println("updateUser: ");
+        User user = userService.getUserById(editedUser.getId());
         editedUser.setRoleId(loggedInUser.getRoleId());
-        if(editedUser.getPassword().compareTo(loggedInUser.getPassword()) != 0) editedUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
+        if(editedUser.getPassword().compareTo(user.getPassword()) != 0) editedUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
 
         if(file.isEmpty()){
             editedUser.setProfileImage(loggedInUser.getProfileImage());
@@ -174,7 +193,10 @@ public class MainController {
             editedUser.setProfileImage("/images/profileImage/" + file.getOriginalFilename());
         }
         userService.saveUser(editedUser);
-        return "redirect:/home";
+        redirectAttributes.addFlashAttribute("message", editedUser.getId() == loggedInUser.getId() ?
+                ("Your profile has been saved.") : (editedUser.getFirstName() + "'s profile has been saved."));
+
+        return "redirect:/editprofile";
     }
 
     public void uploadSingleImage(MultipartFile file) {

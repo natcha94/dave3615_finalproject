@@ -21,81 +21,89 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
-    <a class="navbar-brand" href="/home"><i class="fas fa-home"></i> Home</a>
-    <a class="navbar-brand" href="/home"><i class="far fa-bell"> </i>Notifications</a>
-    <a class="navbar-brand" href="/home"><i class="far fa-envelope"></i> Message</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+        <a class="navbar-brand" href="/home"><i class="fas fa-home"></i> Home</a>
+        <a class="navbar-brand" href="/home"><i class="far fa-bell"> </i>Notifications</a>
+        <a class="navbar-brand" href="/home"><i class="far fa-envelope"></i> Message</a>
 
-    <a class="navbar-brand" href="/home"><i class="fab fa-twitter"></i></a>
+        <a class="navbar-brand" href="/home"><i class="fab fa-twitter"></i></a>
 
-    <form th:action="@{/searching}" method="get" class="form-inline ">
-        <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search" name="searchinput">
-        <i class="fas fa-search" aria-hidden="true"></i>
-    </form>
-    <div class="row logout-user-section">
-        <div class="col-sm-11">
-            <a href="/userprofile">
-                <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
+        <form th:action="@{/searching}" method="get" class="form-inline ">
+            <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search" name="searchinput">
+            <i class="fas fa-search" aria-hidden="true"></i>
+        </form>
+
+        <div th:if="${user != null}" class="row logout-user-section">
+            <div class="col-sm-12">
+                <a href="#" data-toggle="popover" th:title="${user.firstName}" data-placement="bottom">
+                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
+                </a>
+                <ul id="popover-content" class="list-group" style="display: none">
+                    <a href="/userprofile" class="list-group-item"><i class="far fa-user"></i> Profile</a>
+                    <a href="/editprofile" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
+                    <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
+                    <a href="/loguserout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
+                </ul>
+            </div>
+
+        </div>
+        <div class="col" th:if="${user == null}">
+            <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/login">
+                Login
             </a>
         </div>
-        <div class="col-sm-1">
-            <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/loguserout">
-                Logout
-            </a>
-        </div>
-    </div>
 
-</nav>
+    </nav>
 
 
-<div class="container">
-    <div class="row justify-content-md-center mt-5">
-        <div class="col-6">
-            <form action="/updateuser" modelAttribute="user" method="post" enctype="multipart/form-data">
-                <input type="hidden"  th:value="${user.id}" name="id">
-                <div class="form-group">
-                    <label>First name</label>
-                    <input th:value="${user.firstName}" type="text" name="firstName" class="form-control" placeholder="First Name">
+    <div class="container">
+        <div class="row justify-content-md-center mt-5">
+            <div class="col-6">
+                <div th:if="${message}">
+                    <h4 th:text="${message}"/>
                 </div>
-                <div class="form-group">
-                    <label>Last name</label>
-                    <input th:value="${user.lastName}" type="text" name="lastName" class="form-control" placeholder="Last Name">
-                </div>
-
-                <div class="form-group">
-                    <label>Email</label>
-                    <input th:value="${user.email}" type="email"  name="email" class="form-control" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <label>Username</label>
-                    <input th:value="${user.username}" type="text"  name="username" class="form-control" placeholder="Username">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input th:value="${user.password}" type="password"  name="password" class="form-control" placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <label>Profile picture</label>
-                    <input type="file" name="file"/>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <a class="btn btn-outline-success my-2 my-sm-0 mx-5" th:href="@{/deleteaccount/}+${user.id}">
-                            Delete account
-                        </a>
+                <form action="/updateuser" modelAttribute="user" method="post" enctype="multipart/form-data">
+                    <input type="hidden"  th:value="${user.id}" name="id">
+                    <div class="form-group">
+                        <label>First name</label>
+                        <input th:value="${user.firstName}" type="text" name="firstName" class="form-control" placeholder="First Name">
                     </div>
-                    <div class="col-sm-6">
-                        <button class="btn btn-success btn-lg btn-block mt-3">Save changes</button>
+                    <div class="form-group">
+                        <label>Last name</label>
+                        <input th:value="${user.lastName}" type="text" name="lastName" class="form-control" placeholder="Last Name">
                     </div>
-                </div>
-            </form>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input th:value="${user.email}" type="email"  name="email" class="form-control" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input th:value="${user.username}" type="text"  name="username" class="form-control" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input th:value="${user.password}" type="password"  name="password" class="form-control" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label>Profile picture</label>
+                        <input type="file" name="file"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="btn btn-outline-success my-2 my-sm-0 mx-5" th:href="@{/deleteaccount/}+${user.id}">
+                                Delete account
+                            </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-success btn-lg btn-block mt-3">Save changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
+
     </div>
-
-</div>
-
-
-</body>
-</html>
+<script src="../static/js/myScript.js" th:src="@{/js/myScript.js}"></script>
 </body>
 </html>

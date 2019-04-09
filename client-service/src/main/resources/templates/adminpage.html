@@ -27,21 +27,18 @@
         </form>
 
         <div th:if="${user != null}" class="row logout-user-section">
-            <div class="col-sm-2" th:if="${user.getRoleId().getRoleName() == 'Admin'}">
-                <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/adminpage">
-                    Admin
-                </a>
-            </div>
-            <div class="col-sm-9">
-                <a href="/userprofile">
+            <div class="col-sm-12">
+                <a href="#" data-toggle="popover" th:title="${user.firstName}" data-placement="bottom">
                     <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
                 </a>
+                <ul id="popover-content" class="list-group" style="display: none">
+                    <a href="/userprofile" class="list-group-item"><i class="far fa-user"></i> Profile</a>
+                    <a href="/editprofile" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
+                    <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
+                    <a href="/loguserout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
+                </ul>
             </div>
-            <div class="col-sm-1">
-                <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/loguserout">
-                    Logout
-                </a>
-            </div>
+
         </div>
         <div class="col" th:if="${user == null}">
             <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/login">
@@ -52,39 +49,41 @@
     </nav>
 
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-8 tweets-section">
-            <div>
-                <div th:each="x : ${allUsers}">
-                    <div class="tweetcard">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <img th:src="${x.profileImage}" alt="Avatar" class="avatar">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 tweets-section">
+                <div th:if="${deletemessage}">
+                    <h2 th:text="${deletemessage}"/>
+                </div>
+                <div>
+                    <div th:each="x : ${allUsers}">
+                        <div class="tweetcard">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <img th:src="${x.profileImage}" alt="Avatar" class="avatar">
+                                </div>
+                                <div class="col-sm-8">
+                                    <p th:text="${x.firstName} + ' ' + ${x.lastName}"></p>
+                                    <p th:text="'@'+${x.username}"></p>
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <p th:text="${user.firstName} + ' ' + ${user.lastName}"></p>
-                                <p th:text="'@'+${user.username}"></p>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a class="btn my-2 my-sm-0 mx-5 setting-btn" th:href="@{/editprofile/}+${x.id}">
+                                        Edit profile
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <a class="btn my-2 my-sm-0 mx-5 setting-btn" th:href="@{/editprofile/}+${x.id}">
-                                    Edit profile
-                                </a>
-                            </div>
-                        </div>
+
                     </div>
 
                 </div>
-
             </div>
+
         </div>
-
     </div>
-</div>
-</div>
 
-
+<script src="../static/js/myScript.js" th:src="@{/js/myScript.js}"></script>
 </body>
 </html>

@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,15 +19,12 @@ public class Tweet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Temporal(TemporalType.DATE)
-    private Date date;
+
+    private LocalDateTime dateTime;
     @Column(length = 140)
     private String text;
     private long userId;
 
-   /* @OneToMany(mappedBy = "tweetId", cascade = CascadeType.ALL, orphanRemoval = true)*/
-    /*@Size(max=4)*/
-    /*@Getter(AccessLevel.NONE)*/
     private ArrayList<String> imagePathList = new ArrayList<>();
 
     @OneToMany(mappedBy = "tweet")
