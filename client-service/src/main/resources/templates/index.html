@@ -55,6 +55,7 @@
             <div th:if="${deletemessage}">
                 <h2 th:text="${deletemessage}"/>
             </div>
+            <!--ABOUT USER CARD-->
             <div th:if="${user != null}" class="col-sm-3 about-user-section">
                 <div class="row">
                     <div class="col-sm-4">
@@ -73,7 +74,9 @@
                     </div>
                 </div>
             </div>
+            <!--TWEET SECTION-->
             <div class="col-sm-8 tweets-section">
+                <!--INPUT FIELD FOR TWEETING A TEXT-->
                 <div th:if="${user != null}">
                     <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet" enctype="multipart/form-data">
                         <div class="form-group">
@@ -85,7 +88,19 @@
                         </div>
                     </form>
                 </div>
+                <!--TWEET CARD-->
                 <div>
+                    <!--FILTERING TWEET-->
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            FILTER FEED
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <a class="dropdown-item" href="/tweetsfromfollowing">See tweets from followings</a>
+                            <a class="dropdown-item" href="/tweetsfromfollowing">See tweets from friend</a>
+                            <a class="dropdown-item" href="/home">See all tweets</a>
+                        </div>
+                    </div>
                     <div th:each="x : ${allTweets}">
                         <div class="row tweetcard">
                             <div class="col-sm-1">
@@ -97,7 +112,10 @@
                                 </div>
                                 <div class="row" style="margin-left: 0 !important;" th:each="y : ${userlist}">
                                     <a th:href="@{/userprofile/}+${x.userId}" ><p th:if="${x.userId == y.id}" style="font-weight: bolder; padding-right: 0.5em; color: #14171A;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
-                                    <p style="color: #87939B" th:if="${x.userId == y.id}" th:with="result=${localdatetime.getHour() - x.getDateTime().getHour()}" th:text="'@'+${y.username} + ' - ' + ${result} + 'h' "></p>
+                                    <p style="color: #87939B" th:if="${x.userId == y.id}"
+                                       th:with="result=${localdatetime.getHour() - x.getDateTime().getHour() > 24 ?
+                                           (localdatetime.getDayOfMonth() + '/' + localdatetime.getMonth() + '/' + localdatetime.getYear()) :  (localdatetime.getHour() - x.getDateTime().getHour() == 0 ? (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') : (localdatetime.getHour() - x.getDateTime().getHour() + 'h'))}"
+                                       th:text="'@'+${y.username} + ' - ' + ${result}"></p>
                                 </div>
 
                                 <p th:text="${x.text}" ></p> </br>

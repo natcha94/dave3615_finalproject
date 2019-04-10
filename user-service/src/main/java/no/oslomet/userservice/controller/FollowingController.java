@@ -30,6 +30,7 @@ public class FollowingController {
 
     @DeleteMapping("/followings/{ownerid}/{id}")
     public void deleteAUserFollowing(@PathVariable long ownerid, @PathVariable long id){
+        System.out.println("deleteAUserFollowing from rest");
         followingService.deleteAUsersFollowing(ownerid, id);
     }
 

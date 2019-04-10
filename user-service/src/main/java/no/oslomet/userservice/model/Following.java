@@ -14,7 +14,7 @@ public class Following {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long ownerId;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
 

@@ -37,15 +37,15 @@ public class MainController {
     private PasswordEncoder passwordEncoder;
 
     private User loggedInUser;
+    private List<Tweet> allTweets = new ArrayList<>();
     private String imageFolder = "C:\\Users\\mebix\\Documents\\Github\\dave3615_finalproject\\client-service\\src\\main\\resources\\static\\images\\";
 
     @GetMapping("/")
     public String home(Model model){
         /*return "login";*/
-        model.addAttribute("user", loggedInUser);
-        model.addAttribute("userlist", userService.getAllUsers());
-        model.addAttribute("allTweets", sortTweetByDateTime(tweetService.getAllTweets()));
-        model.addAttribute("localdatetime", LocalDateTime.now());
+        indexModelAttribute(model, sortTweetByDateTime(tweetService.getAllTweets()));
+        /*System.out.println("home" + LocalDateTime.now().getDayOfMonth() + ", " + LocalDateTime.now().getDayOfWeek() + ", " + LocalDateTime.now().getDayOfYear()
+        + ", " + LocalDateTime.now().getMonth() + ", " + LocalDateTime.now().getMonthValue() + ", " + LocalDateTime.now().getYear() + ", ");*/
         return "index";
     }
 
@@ -60,12 +60,9 @@ public class MainController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUserName(auth.getName());
         loggedInUser = user;
-        if(user != null) model.addAttribute("user", loggedInUser);
-        System.out.println("homePage2: " + loggedInUser.getUsername() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + loggedInUser.getPassword() + ", " + loggedInUser.getProfileImage());
-        model.addAttribute("userlist", userService.getAllUsers());
-        model.addAttribute("allTweets", sortTweetByDateTime(tweetService.getAllTweets()));
-        model.addAttribute("user", loggedInUser);
-        model.addAttribute("localdatetime", LocalDateTime.now());
+        indexModelAttribute(model, sortTweetByDateTime(tweetService.getAllTweets()));
+        /*if(user != null) model.addAttribute("user", loggedInUser);*/
+        System.out.println("homePage: " + loggedInUser.getUsername() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + loggedInUser.getPassword() + ", " + loggedInUser.getProfileImage());
         /*int t = LocalDateTime.now().getHour() - tweetService.getTweetById(1).getDateTime().getHour();*/
 
         return "index";
@@ -152,20 +149,6 @@ public class MainController {
         });
     }
 
-/*    @GetMapping("/userprofile")
-    public String profilePage(Model model){
-        model.addAttribute("user", loggedInUser);
-        model.addAttribute("disableFollowingBtn", true);
-        model.addAttribute("disableEditBtn", true);
-        model.addAttribute("allTweets", tweetService.getTweetsByUserId(loggedInUser.getId()));
-        model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(loggedInUser.getId()).size());
-        model.addAttribute("allFollowing", followingList);
-        model.addAttribute("userlist", userService.getAllUsers());
-        model.addAttribute("localdatetime", LocalDateTime.now());
-
-        return "userprofile";
-    }*/
-
     @GetMapping("/userprofile/{id}")
     public String profilePage(@PathVariable long id, Model model){
         model.addAttribute("user", userService.getUserById(id));
@@ -248,7 +231,7 @@ public class MainController {
         loggedInUser.getFollowingList().add(new Following(loggedInUser.getId(), userService.getUserById(id)));
         userService.saveUser(loggedInUser);
         model.addAttribute("user", userService.getUserById(id));
-        return "redirect:/";
+        return "redirect:/userprofile/{id}";
     }
 
     @GetMapping("/unfollow/{id}")
@@ -274,6 +257,29 @@ public class MainController {
         model.addAttribute("userlist", userService.getAllUsers());
         model.addAttribute("localdatetime", LocalDateTime.now());
         return "userprofile";
+    }
+
+    @GetMapping("/tweetsfromfollowing")
+    public String tweetsFromFollowing(Model model){
+        System.out.println("tweetsFromFollowing");
+        List<Tweet> tweetsFromFollowings = new ArrayList<>();
+        for (Following f : followingService.getFollowingByOwnerId(loggedInUser.getId()) ){
+            System.out.println(f.getUser().getUsername());
+            tweetService.getTweetsByUserId(f.getUser().getId()).forEach(x -> tweetsFromFollowings.add(x));
+        }
+
+        tweetsFromFollowings.forEach(x -> System.out.println(x.getUserId() + ", " + x.getText()));
+        indexModelAttribute(model, tweetsFromFollowings);
+        return "index";
+    }
+
+    public Model indexModelAttribute(Model model, List<Tweet> allTweets){
+        model.addAttribute("userlist", userService.getAllUsers());
+        model.addAttribute("allTweets", allTweets);
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("localdatetime", LocalDateTime.now());
+
+        return model;
     }
 
 }
