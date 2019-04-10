@@ -38,4 +38,11 @@ public class FollowingService {
     public void deleteFollowingById(long id){
         followingRepository.deleteById(id);
     }
+    public void deleteAUsersFollowing(long ownerId, long userId)
+    {
+        getFollowingsByOwnerId(ownerId).forEach( x -> {
+            if(x.getUser().getId() == userId) followingRepository.deleteById(x.getId());
+        });
+
+    }
 }

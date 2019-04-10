@@ -187,12 +187,6 @@ public class MainController {
         return false;
     }
 
-/*    @GetMapping("/editprofile")
-    public String editProfile(Model model){
-        model.addAttribute("user", loggedInUser);
-        return "edituserprofile";
-    }*/
-
     @GetMapping("/editprofile/{id}")
     public String editProfile(@PathVariable long id, Model model){
         model.addAttribute("user", userService.getUserById(id));
@@ -255,6 +249,13 @@ public class MainController {
         userService.saveUser(loggedInUser);
         model.addAttribute("user", userService.getUserById(id));
         return "redirect:/";
+    }
+
+    @GetMapping("/unfollow/{id}")
+    public String unfollowAUser(@PathVariable long id){
+        System.out.println("unfollowAUser");
+        followingService.deleteAUserFollowing(loggedInUser.getId(), id);
+        return "redirect:/userprofile/{id}";
     }
 
     @GetMapping("/allfollowing/{id}")

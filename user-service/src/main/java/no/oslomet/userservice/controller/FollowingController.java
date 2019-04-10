@@ -28,6 +28,11 @@ public class FollowingController {
         return followingService.getFollowingById(id);
     }
 
+    @DeleteMapping("/followings/{ownerid}/{id}")
+    public void deleteAUserFollowing(@PathVariable long ownerid, @PathVariable long id){
+        followingService.deleteAUsersFollowing(ownerid, id);
+    }
+
     @DeleteMapping("/followings/{id}")
     public void deleteFollowingById(@PathVariable long id){
         followingService.deleteFollowingById(id);

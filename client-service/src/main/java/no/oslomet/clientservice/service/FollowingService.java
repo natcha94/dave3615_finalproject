@@ -46,4 +46,7 @@ public class FollowingService {
     public void deleteFollowingById(long id){
         restTemplate.delete(BASE_URL+"/"+id);
     }
+    public void deleteAUserFollowing(long owenerId , long userId){
+        restTemplate.delete(BASE_URL+"/"+owenerId+"/"+userId);
+    }
 }
