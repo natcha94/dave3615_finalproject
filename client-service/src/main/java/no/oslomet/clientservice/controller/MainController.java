@@ -153,7 +153,12 @@ public class MainController {
 
     @GetMapping("/userprofile/{id}")
     public String profilePage(@PathVariable long id, Model model){
-        userprofileModelAttribute(model, new ArrayList<>(), id);
+
+        List<User> followingList = new ArrayList<>();
+        userService.getUserById(id).getFollowingList().forEach(x -> {
+            followingList.add(userService.getUserById(x.getAccountId()));
+        });
+
         model.addAttribute("user", userService.getUserById(id));
         model.addAttribute("disableFollowingBtn", id == loggedInUser.getId() ? true : false);
         model.addAttribute("disableEditBtn", id == loggedInUser.getId() ? true : false);
@@ -161,7 +166,7 @@ public class MainController {
         model.addAttribute("allTweets", tweetService.getTweetsByUserId(id));
         model.addAttribute("numberOfFollowing", userService.getUserById(id).getFollowingList().size());
         model.addAttribute("numberOfFollower", userService.getUserById(id).getFollowerList().size());
-        model.addAttribute("allFollowing", userService.getUserById(id).getFollowingList());
+        model.addAttribute("allFollowing", followingList);
         model.addAttribute("userlist", userService.getAllUsers());
         model.addAttribute("localdatetime", LocalDateTime.now());
         return "userprofile";
@@ -236,33 +241,53 @@ public class MainController {
     @GetMapping("/follow/{id}")
     public String followAUser(@PathVariable long id, Model model){
         System.out.println("followAUser");
-        updateFollowingList(id);
-        updateFollowerList(id);
-        userService.saveUser(loggedInUser);
+        //loggedInUser.getFollowingList().add(new Following(id, userService.getUserById(id)));
+
+        followingService.saveFollowing(new Following(id, userService.getUserById(loggedInUser.getId())));
+        followerService.saveFollower(new Follower())
+        /*updateFollowingList(id);*/
+        /*updateFollowerList(id);*/
+
+        List<User> followingList = new ArrayList<>();
+        userService.getUserById(id).getFollowingList().forEach(x -> {
+            followingList.add(userService.getUserById(x.getAccountId()));
+        });
+
         model.addAttribute("user", userService.getUserById(id));
-        return "redirect:/userprofile/{id}";
+        model.addAttribute("disableFollowingBtn", id == loggedInUser.getId() ? true : false);
+        model.addAttribute("disableEditBtn", id == loggedInUser.getId() ? true : false);
+        model.addAttribute("isFollowing", checkIfFollowing(id));
+        model.addAttribute("allTweets", tweetService.getTweetsByUserId(id));
+        model.addAttribute("numberOfFollowing", userService.getUserById(id).getFollowingList().size());
+        model.addAttribute("numberOfFollower", userService.getUserById(id).getFollowerList().size());
+        model.addAttribute("allFollowing", followingList);
+        model.addAttribute("userlist", userService.getAllUsers());
+        model.addAttribute("localdatetime", LocalDateTime.now());
+        return "userprofile";
     }
 
     public void updateFollowingList(long id){
-        loggedInUser.getFollowingList().add(new Following(loggedInUser.getId(), userService.getUserById(id)));
+        //id til person som du følger, person som du følger
+        loggedInUser.getFollowingList().add(new Following(id, userService.getUserById(id)));
     }
 
     public void updateFollowerList(long id){
         System.out.println("updateFollowerList: " + userService.getUserById(id).getUsername());
         System.out.println(userService.getUserById(id).getFollowerList().size());
         followerService.saveFollower(new Follower(id, loggedInUser));
+        /*userService.getUserById(id).getFollowerList().add(new Follower(id, loggedInUser));*/
         /*userService.getUserById(id).getFollowerList().add(new Follower());*/
     }
 
-    @GetMapping("/unfollow/{id}")
+/*    @GetMapping("/unfollow/{id}")
     public String unfollowAUser(@PathVariable long id){
         System.out.println("unfollowAUser");
         followingService.deleteAUserFollowing(loggedInUser.getId(), id);
         followerService.deleteAUserFollower(id, loggedInUser.getId());
         return "redirect:/userprofile/{id}";
-    }
+    }*/
 
-    @GetMapping("/allfollowing/{id}")
+/*    @GetMapping("/allfollowing/{id}")
     public String getAllFollowing(@PathVariable long id, Model model){
         System.out.println("getAllFollowing");
         List<User> followingList = new ArrayList<>();
@@ -270,9 +295,9 @@ public class MainController {
         userprofileModelAttribute(model, followingList, id);
 
         return "userprofile";
-    }
+    }*/
 
-    @GetMapping("/allfollower/{id}")
+/*    @GetMapping("/allfollower/{id}")
     public String getAllFollower(@PathVariable long id, Model model){
         System.out.println("getAllFollower");
         List<User> followerList = new ArrayList<>();
@@ -280,9 +305,9 @@ public class MainController {
         userprofileModelAttribute(model, followerList, id);
 
         return "userprofile";
-    }
+    }*/
 
-    @GetMapping("/tweetsfromfollowing")
+/*    @GetMapping("/tweetsfromfollowing")
     public String tweetsFromFollowing(Model model){
         System.out.println("tweetsFromFollowing");
         List<Tweet> tweetsFromFollowings = new ArrayList<>();
@@ -294,7 +319,7 @@ public class MainController {
         tweetsFromFollowings.forEach(x -> System.out.println(x.getUserId() + ", " + x.getText()));
         indexModelAttribute(model, tweetsFromFollowings);
         return "index";
-    }
+    }*/
 
     @GetMapping("/retweet/{id}")
     public String retweet(@PathVariable long id, Model model){

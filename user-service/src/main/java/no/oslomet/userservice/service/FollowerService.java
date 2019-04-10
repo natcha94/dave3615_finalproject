@@ -22,11 +22,11 @@ public class FollowerService {
         return followerRepository.findById(id).get();
     }
 
-    public List<Follower> getFollowersByOwnerId(long id)
+    public List<Follower> getFollowersByUserId(long id)
     {
         List<Follower> followerList = new ArrayList<>();
         followerRepository.findAll().forEach(x -> {
-            if(x.getOwnerId() == id) followerList.add(x);
+            if(x.getAccountId() == id) followerList.add(x);
         });
         return followerList;
     }

@@ -20,10 +20,10 @@ public class FollowingService {
         ).collect((Collectors.toList()));
     }
 
-    public List<Following> getFollowingByOwnerId(long ownerid)
+    public List<Following> getFollowingByUserId(long userid)
     {
         return Arrays.stream(
-                restTemplate.getForObject(BASE_URL+"/owner/"+ownerid, Following[].class)
+                restTemplate.getForObject(BASE_URL+"/owner/"+userid, Following[].class)
         ).collect((Collectors.toList()));
     }
 
@@ -47,8 +47,8 @@ public class FollowingService {
         restTemplate.delete(BASE_URL+"/"+id);
     }
 
-    public void deleteAUserFollowing(long ownerId , long id){
+/*    public void deleteAUserFollowing(long ownerId , long id){
         System.out.println("deleteAUserFollowing from service");
         restTemplate.delete(BASE_URL+"/"+ownerId+"/"+id);
-    }
+    }*/
 }

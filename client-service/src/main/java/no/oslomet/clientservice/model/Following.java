@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Following {
     private long id;
-    private long ownerId;
+    private long accountId;
     private User user;
 
     public Following ()
@@ -13,9 +13,9 @@ public class Following {
 
     }
 
-    public Following (long ownerId, User user)
+    public Following (long accountId, User user)
     {
-        this.ownerId = ownerId;
+        this.accountId = accountId;
         this.user = user;
     }
 }

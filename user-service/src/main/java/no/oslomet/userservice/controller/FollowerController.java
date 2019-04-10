@@ -23,20 +23,20 @@ public class FollowerController {
         return followerService.getFollowerById(id);
     }
 
-    @GetMapping("/followers/owner/{id}")
-    public List<Follower> getFollowerByOwnerId(@PathVariable long id){
-        return followerService.getFollowersByOwnerId(id);
+    @GetMapping("/followers/user/{id}")
+    public List<Follower> getFollowerByUserId(@PathVariable long id){
+        return followerService.getFollowersByUserId(id);
     }
 
     @DeleteMapping("/followers/{id}")
     public void deleteFollowerById(@PathVariable long id){
         followerService.deleteFollowerById(id);
     }
-
-/*    @DeleteMapping("/followers/{ownerid}/{id}")
-    public void deleteAUserFollower(@PathVariable long ownerid, @PathVariable long id){
+/*
+    @DeleteMapping("/followers/{userid}/{id}")
+    public void deleteAUserFollower(@PathVariable long userid, @PathVariable long id){
         System.out.println("deleteAUserFollowing from rest");
-        followerService.deleteAUsersFollower(ownerid, id);
+        followerService.deleteAUsersFollower(userid, id);
     }*/
 
     @PostMapping("/followers")

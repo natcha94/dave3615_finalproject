@@ -11,7 +11,7 @@ public class Following {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long ownerId;
+    private long accountId;
     @ManyToOne
     @Getter(AccessLevel.NONE)
     @JoinColumn(name="user_id")
@@ -20,9 +20,9 @@ public class Following {
     public Following (){
     }
 
-    public Following (long ownerId, User user)
+    public Following (long accountId, User user)
     {
-        this.ownerId = ownerId;
+        this.accountId = accountId;
         this.user = user;
     }
 
