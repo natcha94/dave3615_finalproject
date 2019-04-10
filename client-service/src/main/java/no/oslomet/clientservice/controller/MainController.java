@@ -235,13 +235,17 @@ public class MainController {
     }
 
     public void updateFollowerList(long id){
-        userService.getUserById(id).getFollowerList().add(new Follower(id, loggedInUser));
+        System.out.println("updateFollowerList: " + userService.getUserById(id).getUsername());
+        System.out.println(userService.getUserById(id).getFollowerList().size());
+        followerService.saveFollower(new Follower(id, loggedInUser));
+        /*userService.getUserById(id).getFollowerList().add(new Follower());*/
     }
 
     @GetMapping("/unfollow/{id}")
     public String unfollowAUser(@PathVariable long id){
         System.out.println("unfollowAUser");
         followingService.deleteAUserFollowing(loggedInUser.getId(), id);
+        followerService.deleteAUserFollower(id, loggedInUser.getId());
         return "redirect:/userprofile/{id}";
     }
 
@@ -251,6 +255,16 @@ public class MainController {
         List<User> followingList = new ArrayList<>();
         followingService.getFollowingByOwnerId(id).forEach(x -> followingList.add(x.getUser()));
         userprofileModelAttribute(model, followingList, id);
+
+        return "userprofile";
+    }
+
+    @GetMapping("/allfollower/{id}")
+    public String getAllFollower(@PathVariable long id, Model model){
+        System.out.println("getAllFollower");
+        List<User> followerList = new ArrayList<>();
+        followerService.getFollowerByOwnerId(id).forEach(x -> followerList.add(x.getUser()));
+        userprofileModelAttribute(model, followerList, id);
 
         return "userprofile";
     }
