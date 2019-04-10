@@ -1,5 +1,6 @@
 package no.oslomet.clientservice.controller;
 
+import no.oslomet.clientservice.model.Follower;
 import no.oslomet.clientservice.model.Following;
 import no.oslomet.clientservice.model.Tweet;
 import no.oslomet.clientservice.model.User;
@@ -33,6 +34,8 @@ public class MainController {
     private HashtagService hashtagService;
     @Autowired
     private FollowingService followingService;
+    @Autowired
+    private FollowerService followerService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -151,15 +154,7 @@ public class MainController {
 
     @GetMapping("/userprofile/{id}")
     public String profilePage(@PathVariable long id, Model model){
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("disableFollowingBtn", id == loggedInUser.getId() ? true : false);
-        model.addAttribute("disableEditBtn", id == loggedInUser.getId() ? true : false);
-        model.addAttribute("isFollowing", checkIfFollowing(id));
-        model.addAttribute("allTweets", tweetService.getTweetsByUserId(id));
-        model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(id).size());
-        model.addAttribute("allFollowing", new ArrayList<>());
-        model.addAttribute("userlist", userService.getAllUsers());
-        model.addAttribute("localdatetime", LocalDateTime.now());
+        userprofileModelAttribute(model, new ArrayList<>(), id);
         return "userprofile";
     }
 
@@ -228,10 +223,19 @@ public class MainController {
     @GetMapping("/follow/{id}")
     public String followAUser(@PathVariable long id, Model model){
         System.out.println("followAUser");
-        loggedInUser.getFollowingList().add(new Following(loggedInUser.getId(), userService.getUserById(id)));
+        updateFollowingList(id);
+        updateFollowerList(id);
         userService.saveUser(loggedInUser);
         model.addAttribute("user", userService.getUserById(id));
         return "redirect:/userprofile/{id}";
+    }
+
+    public void updateFollowingList(long id){
+        loggedInUser.getFollowingList().add(new Following(loggedInUser.getId(), userService.getUserById(id)));
+    }
+
+    public void updateFollowerList(long id){
+        userService.getUserById(id).getFollowerList().add(new Follower(id, loggedInUser));
     }
 
     @GetMapping("/unfollow/{id}")
@@ -246,16 +250,8 @@ public class MainController {
         System.out.println("getAllFollowing");
         List<User> followingList = new ArrayList<>();
         followingService.getFollowingByOwnerId(id).forEach(x -> followingList.add(x.getUser()));
+        userprofileModelAttribute(model, followingList, id);
 
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("disableFollowingBtn", id == loggedInUser.getId() ? true : false);
-        model.addAttribute("disableEditBtn", id == loggedInUser.getId() ? true : false);
-        model.addAttribute("isFollowing", checkIfFollowing(id));
-        model.addAttribute("allTweets", tweetService.getTweetsByUserId(id));
-        model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(id).size());
-        model.addAttribute("allFollowing", followingList);
-        model.addAttribute("userlist", userService.getAllUsers());
-        model.addAttribute("localdatetime", LocalDateTime.now());
         return "userprofile";
     }
 
@@ -279,6 +275,20 @@ public class MainController {
         model.addAttribute("user", loggedInUser);
         model.addAttribute("localdatetime", LocalDateTime.now());
 
+        return model;
+    }
+
+    public Model userprofileModelAttribute(Model model, List<User> followingList, long id){
+        model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("disableFollowingBtn", id == loggedInUser.getId() ? true : false);
+        model.addAttribute("disableEditBtn", id == loggedInUser.getId() ? true : false);
+        model.addAttribute("isFollowing", checkIfFollowing(id));
+        model.addAttribute("allTweets", tweetService.getTweetsByUserId(id));
+        model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(id).size());
+        model.addAttribute("numberOfFollower", followerService.getFollowerByOwnerId(id).size());
+        model.addAttribute("allFollowing", followingList);
+        model.addAttribute("userlist", userService.getAllUsers());
+        model.addAttribute("localdatetime", LocalDateTime.now());
         return model;
     }
 

@@ -15,7 +15,7 @@ public class User {
     private String password;
     private String profileImage = "/images/profileImage/DefaultAvatar/Twitter-Default-Avatar.png";
     private Role roleId;
-    private List<Follower> followerList;
+    private List<Follower> followerList = new ArrayList<>();
     private List<Following> followingList = new ArrayList<>();
 
     public User(){

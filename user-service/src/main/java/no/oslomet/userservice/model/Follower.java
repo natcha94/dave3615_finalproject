@@ -12,11 +12,18 @@ public class Follower{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    private long ownerId;
+    @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
 
     public Follower (){
+    }
+
+    public Follower (long ownerId, User user)
+    {
+        this.ownerId = ownerId;
+        this.user = user;
     }
 
 }

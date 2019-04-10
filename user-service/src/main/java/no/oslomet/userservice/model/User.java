@@ -21,9 +21,9 @@ public class User{
     @ManyToOne
     @JoinColumn(name="role_id")
     private Role roleId;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
-    private List<Follower> followerList;
+    private List<Follower> followerList = new ArrayList<>();
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<Following> followingList = new ArrayList<>();

@@ -5,9 +5,17 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@NoArgsConstructor
-@ToString
 public class Follower {
     private long id;
+    private long ownerId;
     private User user;
+
+    public Follower(){
+
+    }
+    public Follower (long ownerId, User user)
+    {
+        this.ownerId = ownerId;
+        this.user = user;
+    }
 }
