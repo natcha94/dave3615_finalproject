@@ -1,9 +1,6 @@
 package no.oslomet.clientservice.controller;
 
-import no.oslomet.clientservice.model.Follower;
-import no.oslomet.clientservice.model.Following;
-import no.oslomet.clientservice.model.Tweet;
-import no.oslomet.clientservice.model.User;
+import no.oslomet.clientservice.model.*;
 import no.oslomet.clientservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -36,6 +33,8 @@ public class MainController {
     private FollowingService followingService;
     @Autowired
     private FollowerService followerService;
+    @Autowired
+    private RetweetService retweetService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -281,6 +280,17 @@ public class MainController {
         tweetsFromFollowings.forEach(x -> System.out.println(x.getUserId() + ", " + x.getText()));
         indexModelAttribute(model, tweetsFromFollowings);
         return "index";
+    }
+
+    @GetMapping("/retweet/{id}")
+    public String retweet(@PathVariable long id, Model model){
+        System.out.println("retweet");
+        retweetService.saveRetweet(new Retweet(loggedInUser.getId(), tweetService.getTweetById(id)));
+        List<User> followerList = new ArrayList<>();
+
+        userprofileModelAttribute(model, followerList, id);
+
+        return "redirect:/";
     }
 
     public Model indexModelAttribute(Model model, List<Tweet> allTweets){

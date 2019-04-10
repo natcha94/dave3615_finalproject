@@ -15,120 +15,133 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
-        <a class="navbar-brand" href="/home"><i class="fas fa-home"></i> Home</a>
-        <a class="navbar-brand" href="/home"><i class="far fa-bell"> </i>Notifications</a>
-        <a class="navbar-brand" href="/home"><i class="far fa-envelope"></i> Message</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+    <a class="navbar-brand" href="/home"><i class="fas fa-home"></i> Home</a>
+    <a class="navbar-brand" href="/home"><i class="far fa-bell"> </i>Notifications</a>
+    <a class="navbar-brand" href="/home"><i class="far fa-envelope"></i> Message</a>
 
-        <a class="navbar-brand" href="/home"><i class="fab fa-twitter"></i></a>
+    <a class="navbar-brand" href="/home"><i class="fab fa-twitter"></i></a>
 
-        <form th:action="@{/searching}" method="get" class="form-inline ">
-            <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search" name="searchinput">
-            <i class="fas fa-search" aria-hidden="true"></i>
-        </form>
+    <form th:action="@{/searching}" method="get" class="form-inline ">
+        <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search" name="searchinput">
+        <i class="fas fa-search" aria-hidden="true"></i>
+    </form>
 
-        <div th:if="${user != null}" class="row logout-user-section">
-            <div class="col-sm-12">
-                <a href="#" data-toggle="popover" th:title="${user.firstName}" data-placement="bottom">
-                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
-                </a>
-                <ul id="popover-content" class="list-group" style="display: none">
-                    <a th:href="@{/userprofile/}+${user.id}" class="list-group-item"><i class="far fa-user"></i> Profile</a>
-                    <a th:href="@{/editprofile/}+${user.id}" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
-                    <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
-                    <a href="/loguserout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
-                </ul>
-            </div>
-
-        </div>
-        <div class="col" th:if="${user == null}">
-            <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/login">
-                Login
+    <div th:if="${user != null}" class="row logout-user-section">
+        <div class="col-sm-12">
+            <a href="#" data-toggle="popover" th:title="${user.firstName}" data-placement="bottom">
+                <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
             </a>
+            <ul id="popover-content" class="list-group" style="display: none">
+                <a th:href="@{/userprofile/}+${user.id}" class="list-group-item"><i class="far fa-user"></i> Profile</a>
+                <a th:href="@{/editprofile/}+${user.id}" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
+                <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
+                <a href="/loguserout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
+            </ul>
         </div>
 
-    </nav>
+    </div>
+    <div class="col" th:if="${user == null}">
+        <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/login">
+            Login
+        </a>
+    </div>
+
+</nav>
 
 
-    <div class="container">
-        <div class="row">
-            <div th:if="${deletemessage}">
-                <h2 th:text="${deletemessage}"/>
-            </div>
-            <!--ABOUT USER CARD-->
-            <div th:if="${user != null}" class="col-sm-3 about-user-section">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <img th:src="${user.profileImage}" alt="Avatar" class="avatar">
-                    </div>
-                    <div class="col-sm-8">
-                        <a class="navbar-brand" th:href="@{/userprofile/}+${user.id}"><p style="font-size: 20px; color: #14171A; font-weight: bolder" th:text="${user.firstName} + ' ' + ${user.lastName}"></p></a>
-                        <p style="color: #87939B" th:text="'@'+${user.username}"></p>
-                    </div>
+<div class="container">
+    <div class="row">
+        <div th:if="${deletemessage}">
+            <h2 th:text="${deletemessage}"/>
+        </div>
+        <!--ABOUT USER CARD-->
+        <div th:if="${user != null}" class="col-sm-3 about-user-section">
+            <div class="row">
+                <div class="col-sm-4">
+                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar">
                 </div>
-                <div class="row">
-                    <div class="col-sm-12 text-left mt-3">
-                        <a class="btn setting-btn" th:href="@{/editprofile/}+${user.id}">
-                            Edit profile
-                        </a>
-                    </div>
+                <div class="col-sm-8">
+                    <a class="navbar-brand" th:href="@{/userprofile/}+${user.id}"><p style="font-size: 20px; color: #14171A; font-weight: bolder" th:text="${user.firstName} + ' ' + ${user.lastName}"></p></a>
+                    <p style="color: #87939B" th:text="'@'+${user.username}"></p>
                 </div>
             </div>
-            <!--TWEET SECTION-->
-            <div class="col-sm-8 tweets-section">
-                <!--INPUT FIELD FOR TWEETING A TEXT-->
-                <div th:if="${user != null}">
-                    <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <input type="text" maxlength="140" name="text" class="form-control" placeholder="What's happening?">
-                            <input type="file" name="files" multiple="multiple"/>
-                            <div th:if="${message}">
-                                <h2 th:text="${message}"/>
-                            </div>
-                        </div>
-                    </form>
+            <div class="row">
+                <div class="col-sm-12 text-left mt-3">
+                    <a class="btn setting-btn" th:href="@{/editprofile/}+${user.id}">
+                        Edit profile
+                    </a>
                 </div>
-                <!--TWEET CARD-->
-                <div>
-                    <!--FILTERING TWEET-->
-                    <div class="dropdown">
-                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            FILTER FEED
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <a class="dropdown-item" href="/tweetsfromfollowing">See tweets from followings</a>
-                            <a class="dropdown-item" href="/tweetsfromfollowing">See tweets from friend</a>
-                            <a class="dropdown-item" href="/home">See all tweets</a>
+            </div>
+        </div>
+        <!--TWEET SECTION-->
+        <div class="col-sm-8 tweets-section">
+            <!--INPUT FIELD FOR TWEETING A TEXT-->
+            <div th:if="${user != null}">
+                <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="text" maxlength="140" name="text" class="form-control" placeholder="What's happening?">
+                        <input type="file" name="files" multiple="multiple"/>
+                        <div th:if="${message}">
+                            <h2 th:text="${message}"/>
                         </div>
                     </div>
-                    <div th:each="x : ${allTweets}">
-                        <div class="row tweetcard">
-                            <div class="col-sm-1">
-                                <img th:each="y : ${userlist}" th:if="${x.userId == y.id}" th:src="${y.profileImage}" alt="Avatar" class="avatar-tweetcard">
+                </form>
+            </div>
+            <!--TWEET CARD-->
+            <div>
+                <!--FILTERING TWEET-->
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        FILTER FEED
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <a class="dropdown-item" href="/tweetsfromfollowing">See tweets from followings</a>
+                        <a class="dropdown-item" href="/tweetsfromfollowing">See tweets from friend</a>
+                        <a class="dropdown-item" href="/home">See all tweets</a>
+                    </div>
+                </div>
+                <div th:each="x : ${allTweets}">
+                    <div class="row tweetcard">
+                        <div class="col-sm-1">
+                            <img th:each="y : ${userlist}" th:if="${x.userId == y.id}" th:src="${y.profileImage}" alt="Avatar" class="avatar-tweetcard">
+                        </div>
+                        <div class="col-sm-11">
+                            <div class="col-md-auto" th:each="img : ${x.imagePathList}">
+                                <img th:src="${img}">
                             </div>
-                            <div class="col-sm-11">
-                                <div class="col-md-auto" th:each="img : ${x.imagePathList}">
-                                    <img th:src="${img}">
-                                </div>
-                                <div class="row" style="margin-left: 0 !important;" th:each="y : ${userlist}">
-                                    <a th:href="@{/userprofile/}+${x.userId}" ><p th:if="${x.userId == y.id}" style="font-weight: bolder; padding-right: 0.5em; color: #14171A;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
-                                    <p style="color: #87939B" th:if="${x.userId == y.id}"
-                                       th:with="result=${localdatetime.getHour() - x.getDateTime().getHour() > 24 ?
+                            <div class="row" style="margin-left: 0 !important;" th:each="y : ${userlist}">
+                                <a th:href="@{/userprofile/}+${x.userId}" ><p th:if="${x.userId == y.id}" style="font-weight: bolder; padding-right: 0.5em; color: #14171A;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
+                                <p style="color: #87939B" th:if="${x.userId == y.id}"
+                                   th:with="result=${localdatetime.getHour() - x.getDateTime().getHour() > 24 ?
                                            (localdatetime.getDayOfMonth() + '/' + localdatetime.getMonth() + '/' + localdatetime.getYear()) :  (localdatetime.getHour() - x.getDateTime().getHour() == 0 ? (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') : (localdatetime.getHour() - x.getDateTime().getHour() + 'h'))}"
-                                       th:text="'@'+${y.username} + ' - ' + ${result}"></p>
+                                   th:text="'@'+${y.username} + ' - ' + ${result}"></p>
+                            </div>
+                            <p th:text="${x.text}" ></p>
+
+                            <div class="row pb-3 tweetcard-action">
+                                <div class="col-sm-1 mr-2">
+                                    <i class="far fa-comment"></i>
                                 </div>
-
-                                <p th:text="${x.text}" ></p> </br>
-
+                                <div class="col-sm-1 mr-2">
+                                    <a th:href="@{/retweet/}+${x.id}"><i class="fas fa-retweet"></i></a> <p th:if="${x.getRetweets().size() != 0}" th:text="${x.getRetweets().size()}"></p>
+                                </div>
+                                <div class="col-sm-1 mr-2">
+                                    <i class="far fa-heart"></i>
+                                </div>
+                                <div class="col-sm-1 mr-2">
+                                    <i class="far fa-envelope"></i>
+                                </div>
                             </div>
                         </div>
-
                     </div>
-                </div>
 
+                </div>
             </div>
+
         </div>
     </div>
+</div>
 <script src="../static/js/myScript.js" th:src="@{/js/myScript.js}"></script>
 </body>
 </html>

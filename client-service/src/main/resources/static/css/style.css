@@ -85,3 +85,19 @@ body {
 .dropdown {
     float: right;
 }
+
+.tweetcard-action{
+    font-size: 15px;
+    color: #657786;
+}
+
+.tweetcard-action a{
+    color: #657786;
+}
+
+.tweetcard-action a:hover {
+    color: #17bf63;
+}
+.unretweet-btn{
+    color: #17bf63;
+}
