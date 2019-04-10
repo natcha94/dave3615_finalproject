@@ -1,8 +1,6 @@
 package no.oslomet.userservice.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,6 +12,7 @@ public class Follower{
     private long id;
     private long ownerId;
     @ManyToOne
+    @Getter(AccessLevel.NONE)
     @JoinColumn(name="user_id")
     private User user;
 

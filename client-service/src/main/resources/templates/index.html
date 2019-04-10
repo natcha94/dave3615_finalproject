@@ -117,9 +117,22 @@
                                            (localdatetime.getDayOfMonth() + '/' + localdatetime.getMonth() + '/' + localdatetime.getYear()) :  (localdatetime.getHour() - x.getDateTime().getHour() == 0 ? (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') : (localdatetime.getHour() - x.getDateTime().getHour() + 'h'))}"
                                        th:text="'@'+${y.username} + ' - ' + ${result}"></p>
                                 </div>
+                                <p th:text="${x.text}" ></p>
 
-                                <p th:text="${x.text}" ></p> </br>
-
+                                <div class="row pb-3 tweetcard-action">
+                                    <div class="col-sm-1 mr-2">
+                                        <i class="far fa-comment"></i>
+                                    </div>
+                                    <div class="col-sm-1 mr-2">
+                                        <a th:href="@{/retweet/}+${x.id}"><i class="fas fa-retweet"></i></a> <p th:if="${x.getRetweets().size() != 0}" th:text="${x.getRetweets().size()}"></p>
+                                    </div>
+                                    <div class="col-sm-1 mr-2">
+                                        <i class="far fa-heart"></i>
+                                    </div>
+                                    <div class="col-sm-1 mr-2">
+                                        <i class="far fa-envelope"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

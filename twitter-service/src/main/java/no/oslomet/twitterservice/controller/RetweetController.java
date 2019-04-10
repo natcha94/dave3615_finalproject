@@ -22,9 +22,19 @@ public class RetweetController {
         return retweetService.getRetweetById(id);
     }
 
+    @GetMapping("/retweets/user/{id}")
+    public List<Retweet> getTweetsByUserId(@PathVariable long id) {
+        return retweetService.getRetweetsByUserId(id);
+    }
+
     @DeleteMapping("/retweets/{id}")
     public void deleteRetweetById(@PathVariable long id) {
         retweetService.deleteRetweetById(id);
+    }
+
+    @DeleteMapping("/retweets/user/{id}")
+    public void deleteRetweetsByUserId(@PathVariable long id) {
+        retweetService.deleteRetweetByUserId(id);
     }
 
     @PostMapping("/retweets")
@@ -37,4 +47,6 @@ public class RetweetController {
         retweet.setId(id);
         return retweetService.saveRetweet(retweet);
     }
+
+
 }

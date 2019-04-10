@@ -22,14 +22,14 @@ public class FollowingService {
         return followingRepository.findById(id).get();
     }
 
-    public List<Following> getFollowingsByOwnerId(long id)
+/*    public List<Following> getFollowingsByOwnerId(long id)
     {
         List<Following> followingList = new ArrayList<>();
         followingRepository.findAll().forEach(x -> {
             if(x.getOwnerId() == id) followingList.add(x);
         });
         return followingList;
-    }
+    }*/
 
     public Following saveFollowing(Following newFollowing){
         return followingRepository.save(newFollowing);
@@ -38,11 +38,11 @@ public class FollowingService {
     public void deleteFollowingById(long id){
         followingRepository.deleteById(id);
     }
-    public void deleteAUsersFollowing(long ownerId, long userId)
+/*    public void deleteAUsersFollowing(long ownerId, long userId)
     {
         getFollowingsByOwnerId(ownerId).forEach( x -> {
             if(x.getUser().getId() == userId) followingRepository.deleteById(x.getId());
         });
 
-    }
+    }*/
 }

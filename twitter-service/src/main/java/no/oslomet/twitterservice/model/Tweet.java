@@ -27,7 +27,7 @@ public class Tweet {
 
     private ArrayList<String> imagePathList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "tweet")
+    @OneToMany(mappedBy = "tweet", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Retweet> retweets;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

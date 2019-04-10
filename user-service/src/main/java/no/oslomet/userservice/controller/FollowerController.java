@@ -33,11 +33,11 @@ public class FollowerController {
         followerService.deleteFollowerById(id);
     }
 
-    @DeleteMapping("/followers/{ownerid}/{id}")
+/*    @DeleteMapping("/followers/{ownerid}/{id}")
     public void deleteAUserFollower(@PathVariable long ownerid, @PathVariable long id){
         System.out.println("deleteAUserFollowing from rest");
         followerService.deleteAUsersFollower(ownerid, id);
-    }
+    }*/
 
     @PostMapping("/followers")
     public Follower createFollower(@RequestBody Follower newFollower){

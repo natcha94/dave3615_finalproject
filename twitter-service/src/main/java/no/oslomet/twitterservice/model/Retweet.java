@@ -23,4 +23,9 @@ public class Retweet {
     public Retweet() {
 
     }
+
+    public Retweet(long userId, Tweet tweet) {
+        this.userId = userId;
+        this.tweet = tweet;
+    }
 }

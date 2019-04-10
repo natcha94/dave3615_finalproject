@@ -18,14 +18,14 @@ public class User{
     private String username;
     private String password;
     private String profileImage = "/images/profileImage/DefaultAvatar/Twitter-Default-Avatar.png";
+
     @ManyToOne
     @JoinColumn(name="role_id")
     private Role roleId;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Getter(AccessLevel.NONE)
+
     private List<Follower> followerList = new ArrayList<>();
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Getter(AccessLevel.NONE)
     private List<Following> followingList = new ArrayList<>();
 
     public User (){

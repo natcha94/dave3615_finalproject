@@ -39,11 +39,11 @@ public class FollowerService {
     public void deleteFollowerById(long id){
         followerRepository.deleteById(id);
     }
-    public void deleteAUsersFollower(long ownerId, long userId)
+/*    public void deleteAUsersFollower(long ownerId, long userId)
     {
         getFollowersByOwnerId(ownerId).forEach( x -> {
             if(x.getUser().getId() == userId) followerRepository.deleteById(x.getId());
         });
 
-    }
+    }*/
 }
