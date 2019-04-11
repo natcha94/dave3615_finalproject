@@ -22,6 +22,11 @@ public class RestController {
         return tweetService.getAllTweets();
     }
 
+    @GetMapping("/tweets/search/{id}")
+    public Tweet getTweetByText(@PathVariable String id) {
+        return tweetService.getTweetByText(id);
+    }
+
     @GetMapping("/tweets/{id}")
     public Tweet getTweetById(@PathVariable long id) {
         return tweetService.getTweetById(id);
