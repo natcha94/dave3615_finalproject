@@ -285,12 +285,27 @@ public class MainController {
     @GetMapping("/retweet/{id}")
     public String retweet(@PathVariable long id, Model model){
         System.out.println("retweet");
-        retweetService.saveRetweet(new Retweet(loggedInUser.getId(), tweetService.getTweetById(id)));
-        List<User> followerList = new ArrayList<>();
-
-        userprofileModelAttribute(model, followerList, id);
+        if(checkIfRetweet(id)){
+            undoRetweet(id);
+        }else{
+            retweetService.saveRetweet(new Retweet(loggedInUser.getId(), tweetService.getTweetById(id)));
+        }
+        userprofileModelAttribute(model,  new ArrayList<>(), id);
 
         return "redirect:/";
+    }
+
+    public boolean checkIfRetweet(long tweetid){
+        for (Retweet x : tweetService.getTweetById(tweetid).getRetweets()) {
+            if (x.getUserId() == loggedInUser.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void undoRetweet(long tweetid){
+        tweetService.deleteTweetRetweetByUserId(tweetid, loggedInUser.getId());
     }
 
     public Model indexModelAttribute(Model model, List<Tweet> allTweets){

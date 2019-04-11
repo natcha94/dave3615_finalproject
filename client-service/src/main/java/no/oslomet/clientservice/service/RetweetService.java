@@ -49,4 +49,6 @@ public class RetweetService {
     public void deleteRetweetByUserId(long userid){
         restTemplate.delete(BASE_URL+"/user/"+userid);
     }
+
+
 }

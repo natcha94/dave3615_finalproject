@@ -52,4 +52,9 @@ public class TweetService {
         restTemplate.delete(BASE_URL+"/user/"+userid);
     }
 
+    public void deleteTweetRetweetByUserId(long tweetid, long userid){
+        restTemplate.delete(BASE_URL+"/retweet/"+tweetid+"/"+userid);
+    }
+
+
 }

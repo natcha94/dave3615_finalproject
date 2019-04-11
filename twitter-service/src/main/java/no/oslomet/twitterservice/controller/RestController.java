@@ -36,6 +36,11 @@ public class RestController {
         tweetService.deleteTweetById(id);
     }
 
+    @DeleteMapping("/tweets/retweet/{id}/{userid}")
+    public void deleteTweetRetweetByUserId(@PathVariable long id, @PathVariable long userid) {
+        tweetService.deleteTweetRetweetByUserId(id, userid);
+    }
+
     @DeleteMapping("/tweets/user/{id}")
     public void deleteTweetByUserId(@PathVariable long id) {
         tweetService.deleteTweetByUserId(id);

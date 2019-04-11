@@ -2,6 +2,7 @@ package no.oslomet.twitterservice.service;
 
 import no.oslomet.twitterservice.model.Hashtag;
 import no.oslomet.twitterservice.model.Tweet;
+import no.oslomet.twitterservice.repoistory.RetweetRepository;
 import no.oslomet.twitterservice.repoistory.TweetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class TweetService {
     private TweetRepository tweetRepository;
     @Autowired
     private HashtagService hashtagRepository;
+    @Autowired
+    private RetweetRepository retweetRepository;
 
     public List<Tweet> getAllTweets() {
         return tweetRepository.findAll();
@@ -62,6 +65,14 @@ public class TweetService {
     {
         getAllTweets().forEach(tw -> {
             if (tw.getUserId() == userid) tweetRepository.deleteById(tw.getId());
+        });
+
+    }
+
+    public void deleteTweetRetweetByUserId(long tweetid, long userId)
+    {
+        getTweetById(tweetid).getRetweets().forEach( x -> {
+            if(x.getUserId()== userId) retweetRepository.deleteById(x.getId());
         });
 
     }
