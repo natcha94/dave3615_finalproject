@@ -78,12 +78,25 @@ public class TweetService {
 
     }
 
-    public Tweet getTweetByText(String text){
-        Optional<Tweet> tweet = tweetRepository.findTweetsByTextContaining(text);
-        if(tweet.isPresent()){
+    public List<Tweet> getTweetByText(String text){
+        String[] split = text.split(" ");
+        List<Tweet> tweet = new ArrayList<>();
+        for(String a : split){
+            System.out.println("a: " + a);
+            if(tweetRepository.findTweetsByTextContains(a).isPresent()){
+                tweetRepository.findTweetsByTextContains(a).get().forEach(tw -> {
+                    tweet.add(tw);
+                    System.out.println("tw: " +tw.getText());
+                });
+            }
+        }
+        //remember to delete duplicate items
+        tweet.forEach(x -> System.out.println("x: " + x.getText()));
+        return tweet;
+        /*if(tweet.isPresent()){
             return tweet.get();
         }else{
             return null;
-        }
+        }*/
     }
 }
