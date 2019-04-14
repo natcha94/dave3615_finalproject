@@ -17,11 +17,6 @@ public class HashtagController {
         return hashtagService.getAllHashtags();
     }
 
-/*    @GetMapping("/hashtags/{id}")
-    public Hashtag getHashtagById(@PathVariable long id) {
-        return hashtagService.getHashtagById(id);
-    }*/
-
     @DeleteMapping("/hashtags/{id}")
     public void deleteHashtagById(@PathVariable long id) {
         hashtagService.deleteHashtagById(id);

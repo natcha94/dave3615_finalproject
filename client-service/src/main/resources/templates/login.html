@@ -5,18 +5,16 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <!--<link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />-->
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <title>Login</title>
+    <title>Twitter - Login</title>
 </head>
 <body>
 
-<div class="container">
-
-    <div class="container">
+    <!--<div class="container">
         <div class="row justify-content-md-center mt-5">
             <div class="col-md-auto imgcontainer">
                 <img src="https://freestylelanguagecenter.com/wp-content/uploads/2018/11/005-girl-1.png" alt="Avatar" class="avatar">
@@ -48,9 +46,51 @@
 
 
     </div>
+-->
 
+    <div class="row login-main">
+        <div class="col-sm-6">
+            <div class="blue-content">
+                <p><i class="fas fa-search"></i> Follow your interests.<br></br>
+                <i class="fas fa-user-friends"></i> Hear what people are talking about.<br></br>
+                <i class="far fa-comment"></i> Join the conversation.</p>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="white-content">
+                <div class="row">
 
-</div>
+                        <form action="/login" method="POST">
+                            <div class="row">
+                                <div class=" form-group col-sm-4">
+                                    <input type="username" name="username" class="form-control" placeholder="username">
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <input type="password" name="password" class="form-control" placeholder="password">
+                                </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-outline-primary" type="submit" >Login</button>
+                                </div>
+                            </div>
+                        </form>
+                   
+
+                </div>
+                <div class="white-content-signup">
+                    <div class="col-sm-12">
+                        <p><i class="fab fa-twitter"></i><br></br></p>
+                        <h3>See what’s happening in the world right now</h3>
+                        <h4>Join Twitter today.</h4>
+                        <a class="btn btn-primary" href="/signup">Sign up</a>
+                        <a class="btn btn-link my-2" href="/signupAdmin">Sign up admin</a>
+                        <button class="btn btn-outline-primary" type="submit" >Login</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </body>
 </html>

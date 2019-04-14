@@ -35,6 +35,13 @@ public class TweetService {
         ).collect((Collectors.toList()));
     }
 
+    public List<Tweet> getTweetByText(String text)
+    {
+        return Arrays.stream(
+                restTemplate.getForObject(BASE_URL+"/search/"+text, Tweet[].class)
+        ).collect((Collectors.toList()));
+    }
+
     public Tweet saveTweet(Tweet newTweet)
     {
         return restTemplate.postForObject(BASE_URL, newTweet, Tweet.class);

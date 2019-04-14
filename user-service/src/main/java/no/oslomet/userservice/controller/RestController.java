@@ -19,6 +19,16 @@ public class RestController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/users/friends/{id}")
+    public List<User> getFriendByUserId(@PathVariable long id){
+        return userService.getFriendByUserId(id);
+    }
+
+    @GetMapping("/users/follower/{id}")
+    public List<User> getFollowerByUserId(@PathVariable long id){
+        return userService.getFollowerByUserId(id);
+    }
+
     @GetMapping("/users/id/{id}")
     public User getUserById(@PathVariable long id){
         return userService.getUserById(id);

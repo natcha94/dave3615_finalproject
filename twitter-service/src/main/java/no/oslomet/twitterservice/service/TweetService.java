@@ -7,10 +7,7 @@ import no.oslomet.twitterservice.repoistory.TweetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +21,13 @@ public class TweetService {
     private RetweetRepository retweetRepository;
 
     public List<Tweet> getAllTweets() {
-        return tweetRepository.findAll();
+        List<Tweet> allTweets = tweetRepository.findAll();
+        reverseTweetList(allTweets);
+        return allTweets;
+    }
+
+    public void reverseTweetList(List<Tweet> tweets){
+        Collections.reverse(tweets);
     }
 
     public Tweet getTweetById(long id) {
@@ -36,6 +39,7 @@ public class TweetService {
         getAllTweets().forEach(tw -> {
             if(tw.getUserId() == id) tweetList.add(tw);
         });
+
         return tweetList;
     }
 
@@ -82,21 +86,12 @@ public class TweetService {
         String[] split = text.split(" ");
         List<Tweet> tweet = new ArrayList<>();
         for(String a : split){
-            System.out.println("a: " + a);
             if(tweetRepository.findTweetsByTextContains(a).isPresent()){
                 tweetRepository.findTweetsByTextContains(a).get().forEach(tw -> {
-                    tweet.add(tw);
-                    System.out.println("tw: " +tw.getText());
+                    if(!tweet.contains(tw)) tweet.add(tw);
                 });
             }
         }
-        //remember to delete duplicate items
-        tweet.forEach(x -> System.out.println("x: " + x.getText()));
         return tweet;
-        /*if(tweet.isPresent()){
-            return tweet.get();
-        }else{
-            return null;
-        }*/
     }
 }

@@ -28,8 +28,6 @@ public class MainController {
     @Autowired
     private TweetService tweetService;
     @Autowired
-    private HashtagService hashtagService;
-    @Autowired
     private FollowingService followingService;
     @Autowired
     private FollowerService followerService;
@@ -39,15 +37,11 @@ public class MainController {
     private PasswordEncoder passwordEncoder;
 
     private User loggedInUser;
-    private List<Tweet> allTweets = new ArrayList<>();
     private String imageFolder = "C:\\Users\\mebix\\Documents\\Github\\dave3615_finalproject\\client-service\\src\\main\\resources\\static\\images\\";
 
     @GetMapping("/")
     public String home(Model model){
-        /*return "login";*/
-        indexModelAttribute(model, sortTweetByDateTime(tweetService.getAllTweets()));
-        /*System.out.println("home" + LocalDateTime.now().getDayOfMonth() + ", " + LocalDateTime.now().getDayOfWeek() + ", " + LocalDateTime.now().getDayOfYear()
-        + ", " + LocalDateTime.now().getMonth() + ", " + LocalDateTime.now().getMonthValue() + ", " + LocalDateTime.now().getYear() + ", ");*/
+        indexModelAttribute(model, tweetService.getAllTweets());
         return "index";
     }
 
@@ -62,18 +56,10 @@ public class MainController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUserName(auth.getName());
         loggedInUser = user;
-        indexModelAttribute(model, sortTweetByDateTime(tweetService.getAllTweets()));
-        /*if(user != null) model.addAttribute("user", loggedInUser);*/
+        indexModelAttribute(model, tweetService.getAllTweets());
         System.out.println("homePage: " + loggedInUser.getUsername() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + loggedInUser.getPassword() + ", " + loggedInUser.getProfileImage());
-        /*int t = LocalDateTime.now().getHour() - tweetService.getTweetById(1).getDateTime().getHour();*/
 
         return "index";
-    }
-
-    public List<Tweet> sortTweetByDateTime (List<Tweet> tweetList){
-        tweetList.sort(Comparator.comparing(Tweet::getDateTime));
-        Collections.reverse(tweetList);
-        return tweetList;
     }
 
     @GetMapping("/loguserout")
@@ -237,7 +223,6 @@ public class MainController {
         System.out.println("updateFollowerList: " + userService.getUserById(id).getUsername());
         System.out.println(userService.getUserById(id).getFollowerList().size());
         followerService.saveFollower(new Follower(id, loggedInUser));
-        /*userService.getUserById(id).getFollowerList().add(new Follower());*/
     }
 
     @GetMapping("/unfollow/{id}")
@@ -273,26 +258,47 @@ public class MainController {
         System.out.println("tweetsFromFollowing");
         List<Tweet> tweetsFromFollowings = new ArrayList<>();
         for (Following f : followingService.getFollowingByOwnerId(loggedInUser.getId()) ){
-            System.out.println(f.getUser().getUsername());
             tweetService.getTweetsByUserId(f.getUser().getId()).forEach(x -> tweetsFromFollowings.add(x));
         }
 
-        tweetsFromFollowings.forEach(x -> System.out.println(x.getUserId() + ", " + x.getText()));
         indexModelAttribute(model, tweetsFromFollowings);
         return "index";
     }
 
+    @GetMapping("/tweetsfromfriends")
+    public String tweetsFromFriends(Model model){
+        System.out.println("tweetsFromFriends");
+        List<Tweet> tweetsFromFriends = new ArrayList<>();
+        for (User usr : userService.getFriendsByUserId(loggedInUser.getId())){
+            tweetService.getTweetsByUserId(usr.getId()).forEach(tw -> tweetsFromFriends.add(tw));
+        }
+
+        indexModelAttribute(model, tweetsFromFriends);
+        return "index";
+    }
+
     @GetMapping("/retweet/{id}")
-    public String retweet(@PathVariable long id, Model model){
+    public String retweet(@PathVariable long id){
         System.out.println("retweet");
         if(checkIfRetweet(id)){
             undoRetweet(id);
         }else{
             retweetService.saveRetweet(new Retweet(loggedInUser.getId(), tweetService.getTweetById(id)));
         }
-        userprofileModelAttribute(model,  new ArrayList<>(), id);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/retweetfromprofile/{userid}/{id}")
+    public String retweetFromProfile(@PathVariable long id){
+        if(checkIfRetweet(id)){
+            undoRetweet(id);
+        }else{
+            retweetService.saveRetweet(new Retweet(loggedInUser.getId(), tweetService.getTweetById(id)));
+        }
+
+
+        return "redirect:/userprofile/{userid}";
     }
 
     public boolean checkIfRetweet(long tweetid){
@@ -312,9 +318,19 @@ public class MainController {
         model.addAttribute("userlist", userService.getAllUsers());
         model.addAttribute("allTweets", allTweets);
         model.addAttribute("user", loggedInUser);
+        model.addAttribute("numberOfFollowing", loggedInUser == null ? (null) : followingService.getFollowingByOwnerId(loggedInUser.getId()).size());
+        model.addAttribute("numberOfFollower", loggedInUser == null ? (null) : followerService.getFollowerByOwnerId(loggedInUser.getId()).size());
         model.addAttribute("localdatetime", LocalDateTime.now());
 
         return model;
+    }
+
+    @GetMapping("/searching")
+    public String search(@RequestParam String searchinput, Model model){
+        searchinput = searchinput.replaceAll("#", "");
+        indexModelAttribute(model, tweetService.getTweetByText(searchinput));
+
+        return "index";
     }
 
     public Model userprofileModelAttribute(Model model, List<User> followingList, long id){
@@ -322,13 +338,27 @@ public class MainController {
         model.addAttribute("disableFollowingBtn", id == loggedInUser.getId() ? true : false);
         model.addAttribute("disableEditBtn", id == loggedInUser.getId() ? true : false);
         model.addAttribute("isFollowing", checkIfFollowing(id));
-        model.addAttribute("allTweets", tweetService.getTweetsByUserId(id));
+        model.addAttribute("allTweets", getUsersTweetAndRetweet(id));
         model.addAttribute("numberOfFollowing", followingService.getFollowingByOwnerId(id).size());
         model.addAttribute("numberOfFollower", followerService.getFollowerByOwnerId(id).size());
         model.addAttribute("allFollowing", followingList);
+        model.addAttribute("allFollower", userService.getFollowersByUserId(id));
         model.addAttribute("userlist", userService.getAllUsers());
         model.addAttribute("localdatetime", LocalDateTime.now());
         return model;
+    }
+
+    public List<Tweet> getUsersTweetAndRetweet (long id){
+        List<Tweet> usersTweetsAndRetweets = new ArrayList<>();
+
+        tweetService.getAllTweets().forEach(tw -> {
+            if(tw.getUserId() == id) usersTweetsAndRetweets.add(tw);
+            tw.getRetweets().forEach(re -> {
+                if(re.getUserId() == id) usersTweetsAndRetweets.add(tw);
+            });
+        });
+
+        return usersTweetsAndRetweets;
     }
 
 }

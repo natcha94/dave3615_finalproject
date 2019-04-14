@@ -23,6 +23,20 @@ public class UserService{
         ).collect((Collectors.toList()));
     }
 
+    public List<User> getFriendsByUserId(long userid)
+    {
+        return Arrays.stream(
+                restTemplate.getForObject(BASE_URL+"/friends/"+userid, User[].class)
+        ).collect((Collectors.toList()));
+    }
+
+    public List<User> getFollowersByUserId(long userid)
+    {
+        return Arrays.stream(
+                restTemplate.getForObject(BASE_URL+"/follower/"+userid, User[].class)
+        ).collect((Collectors.toList()));
+    }
+
     public User getUserByUserName(String username)
     {
         User user = restTemplate.getForObject(BASE_URL+"/"+username, User.class);
