@@ -24,7 +24,7 @@
                 <a class="navbar-brand" href="/home"><i class="far fa-envelope"></i> Message</a>
             </div>
             <div class="col-sm-3" style="text-align: center">
-                <a class="navbar-brand" href="/home"><i class="fab fa-twitter"></i></a>
+                <a class="navbar-brand" href="/home"><i class="fab fa-twitter fa-2x"></i></a>
             </div>
             <div class="col-sm-4" >
                 <div class="row" style="width: 70%; margin: 0">
@@ -155,7 +155,7 @@
                                 <div class="row" style="margin-left: 0 !important;" th:each="y : ${userlist}">
                                     <a th:href="@{/userprofile/}+${x.userId}" ><p th:if="${x.userId == y.id}" style="font-weight: bolder; padding-right: 0.5em; color: #14171A;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
                                     <p style="color: #87939B" th:if="${x.userId == y.id}"
-                                       th:with="result=${localdatetime.getHour() - x.getDateTime().getHour() < 0 ?
+                                       th:with="result=${localdatetime.getHour() - x.getDateTime().getHour() <= 0 ?
                                                (localdatetime.getDayOfMonth() + '/' + localdatetime.getMonth() + '/' + localdatetime.getYear()) :  (localdatetime.getHour() - x.getDateTime().getHour() == 0 ? (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') : (localdatetime.getHour() - x.getDateTime().getHour() + 'h'))}"
                                        th:text="'@'+${y.username} + ' - ' + ${result}"></p>
                                 </div>
