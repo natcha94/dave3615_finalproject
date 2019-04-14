@@ -49,17 +49,16 @@
 -->
 
     <div class="row login-main">
-        <div class="col-sm-6">
+        <div class="col-sm-6" style="background-color: #1DA1F2">
             <div class="blue-content">
                 <p><i class="fas fa-search"></i> Follow your interests.<br></br>
                 <i class="fas fa-user-friends"></i> Hear what people are talking about.<br></br>
                 <i class="far fa-comment"></i> Join the conversation.</p>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="white-content">
-                <div class="row">
-
+        <div class="col-sm-6" style="background-color: #FFFFFF">
+            <div style="height: 100%">
+                    <div class="row" style="float: right;">
                         <form action="/login" method="POST">
                             <div class="row">
                                 <div class=" form-group col-sm-4">
@@ -69,24 +68,37 @@
                                     <input type="password" name="password" class="form-control" placeholder="password">
                                 </div>
                                 <div class="col-sm-4">
-                                    <button class="btn btn-outline-primary" type="submit" >Login</button>
+                                    <button class="btn btn-outline-primary" style="border-radius: 20px !important; font-weight: 600" type="submit" >Login</button>
                                 </div>
                             </div>
                         </form>
-                   
+                    </div>
+                    <div class="white-content">
+                        <div class="row">
+                            <div class="col-12" style="margin-top: 1em">
+                                <p><i class="fab fa-twitter"></i></p>
+                            </div>
+                            <div class="col-12" style="margin-top: 1em">
+                                <h3>See what’s happening in the world right now</h3>
+                                <h4>Join Twitter today.</h4>
+                            </div>
+                            <div class="col-12" style="margin-top: 1em">
+                                <a class="btn btn-primary btn-block" href="/signup">Sign up</a>
+                            </div>
+                            <div class="col-12" style="margin-top: 1em">
+                                <a class="btn btn-outline-primary btn-block" href="/signupAdmin">Sign up admin</a>
+                            </div>
+                            <div class="col-12" style="margin-top: 1em">
+                                <button class="btn btn-outline-primary btn-block" type="submit" >Login</button>
+                            </div>
 
-                </div>
-                <div class="white-content-signup">
-                    <div class="col-sm-12">
-                        <p><i class="fab fa-twitter"></i><br></br></p>
-                        <h3>See what’s happening in the world right now</h3>
-                        <h4>Join Twitter today.</h4>
-                        <a class="btn btn-primary" href="/signup">Sign up</a>
-                        <a class="btn btn-link my-2" href="/signupAdmin">Sign up admin</a>
-                        <button class="btn btn-outline-primary" type="submit" >Login</button>
+
+
+                        </div>
+
                     </div>
 
-                </div>
+
             </div>
         </div>
     </div>
