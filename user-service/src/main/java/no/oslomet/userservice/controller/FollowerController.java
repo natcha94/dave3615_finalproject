@@ -39,6 +39,16 @@ public class FollowerController {
         followerService.deleteAUsersFollower(ownerid, id);
     }
 
+    @DeleteMapping("/followers/user/{id}")
+    public void deleteFollowingByUser(@PathVariable long id){
+        followerService.deleteFollowingByUser(id);
+    }
+
+    @DeleteMapping("/followers/owner/{id}")
+    public void deleteFollowerByOwnerId(@PathVariable long id){
+        followerService.deleteFollowerByOwnerId(id);
+    }
+
     @PostMapping("/followers")
     public Follower createFollower(@RequestBody Follower newFollower){
         followerService.saveFollower(newFollower);

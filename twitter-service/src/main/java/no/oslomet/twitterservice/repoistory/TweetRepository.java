@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface TweetRepository extends JpaRepository<Tweet, Long> {
     Optional<List<Tweet>> findTweetsByTextContains(String text);
-
 }

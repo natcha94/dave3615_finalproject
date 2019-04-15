@@ -1,18 +1,23 @@
 package no.oslomet.userservice.service;
 
 import no.oslomet.userservice.model.Following;
+import no.oslomet.userservice.model.User;
 import no.oslomet.userservice.repository.FollowingRepository;
+import no.oslomet.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FollowingService {
     @Autowired
     private FollowingRepository followingRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Following> getAllFollowings() {
         return followingRepository.findAll();
@@ -44,5 +49,24 @@ public class FollowingService {
             if(x.getUser().getId() == userId) followingRepository.deleteById(x.getId());
         });
 
+    }
+
+    public void deleteFollowingByUser(long userid){
+        Optional<List<Following>> list = followingRepository.findFollowingByUser(userRepository.findById(userid).get());
+        if(list.isPresent()){
+            list.get().forEach(x -> {
+                followingRepository.deleteById(x.getId());
+            });
+        }
+    }
+
+    public void deleteFollowingByOwnerId(long ownerId)
+    {
+        Optional<List<Following>> list = followingRepository.findFollowingByOwnerId(ownerId);
+        if(list.isPresent()){
+            list.get().forEach(x -> {
+                followingRepository.deleteById(x.getId());
+            });
+        }
     }
 }

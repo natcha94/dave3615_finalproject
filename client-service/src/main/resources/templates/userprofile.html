@@ -179,33 +179,49 @@
                         <!--TWEET CARD-->
                         <div th:each="x : ${allTweets}">
                             <div class="row tweetcard">
-                                <div class="col-sm-1">
-                                    <img th:each="y : ${userlist}" th:if="${x.userId == y.id}" th:src="${y.profileImage}" alt="Avatar" class="avatar-tweetcard">
-                                </div>
-                                <div class="col-sm-11">
-                                    <div class="col-md-auto" th:each="img : ${x.imagePathList}">
-                                        <img th:src="${img}">
-                                    </div>
-                                    <div class="row" style="margin-left: 0 !important;" th:each="y : ${userlist}">
-                                        <a th:href="@{/userprofile/}+${x.userId}" ><p th:if="${x.userId == y.id}" style="font-weight: bolder; padding-right: 0.5em; color: #14171A;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
-                                        <p style="color: #87939B" th:if="${x.userId == y.id}"
-                                           th:with="result=${localdatetime.getHour() - x.getDateTime().getHour() <= 0 ?
+                                <div class="col-12 ml-0">
+                                    <div th:each="y : ${userlist}" class="row">
+                                        <div class="col-1 mr-4">
+                                            <img th:if="${x.userId == y.id}" th:src="${y.profileImage}" alt="Avatar" class="avatar-tweetcard">
+                                        </div>
+                                        <div class="col-8 mt-2">
+                                            <div class="row" th:if="${x.userId == y.id}">
+                                                <a th:href="@{/userprofile/}+${y.id}"><p style="font-size: 14px; color: #14171A; font-weight: bolder; margin-right: 1em;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
+                                                <p style="color: #87939B" th:if="${x.userId == y.id}"
+                                                   th:with="result=${localdatetime.getHour() - x.getDateTime().getHour() < 0 ?
                                            (localdatetime.getDayOfMonth() + '/' + localdatetime.getMonth() + '/' + localdatetime.getYear()) :  (localdatetime.getHour() - x.getDateTime().getHour() == 0 ? (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') : (localdatetime.getHour() - x.getDateTime().getHour() + 'h'))}"
-                                           th:text="'@'+${y.username} + ' - ' + ${result}"></p>
+                                                   th:text="' @'+${y.username} + ' - ' + ${result}"></p>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <p th:text="${x.text}" ></p> </br>
-                                    <div class="row pb-3 tweetcard-action">
-                                        <div class="col-sm-1 mr-2">
+                                    <div class="col-12 ml-5">
+                                        <p th:text="${x.text}" ></p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div th:with="class=${x.imagePathList.size() == 3 ? 'wrapped multiple-image' : x.imagePathList.size() == 2 ?  'wrapped double-image' : 'wrapped'}" th:class="${class}">
+                                        <div th:each="img : ${x.imagePathList}" class="img-container">
+                                            <img th:src="${img}" th:alt="${img}" />
+                                        </div>
+                                    </div>
+                                    <div th:if="${user != null}" class="row pb-3 ml-4 tweetcard-action">
+                                        <div class="col-sm-2">
                                             <i class="far fa-comment"></i>
                                         </div>
-                                        <div class="col-sm-1 mr-2">
-                                            <a th:href="@{/retweetfromprofile/}+${user.id}+'/'+${x.id}"><i class="fas fa-retweet"></i></a> <p th:if="${x.getRetweets().size() != 0}" th:text="${x.getRetweets().size()}"></p>
+                                        <div class="col-sm-2">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <a th:href="@{/retweetfromprofile/}+${user.id}+'/'+${x.id}"><i class="fas fa-retweet"></i></a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p th:if="${x.getRetweets().size() != 0}" th:text="${x.getRetweets().size()}"></p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-1 mr-2">
+                                        <div class="col-sm-2">
                                             <i class="far fa-heart"></i>
                                         </div>
-                                        <div class="col-sm-1 mr-2">
+                                        <div class="col-sm-2">
                                             <i class="far fa-envelope"></i>
                                         </div>
                                     </div>

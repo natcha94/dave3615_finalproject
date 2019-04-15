@@ -37,6 +37,7 @@ public class MainController {
     private PasswordEncoder passwordEncoder;
 
     private User loggedInUser;
+    private long editedUserId = 0;
     private String imageFolder = "C:\\Users\\mebix\\Documents\\Github\\dave3615_finalproject\\client-service\\src\\main\\resources\\static\\images\\";
 
     @GetMapping("/")
@@ -150,9 +151,15 @@ public class MainController {
         return false;
     }
 
-    @GetMapping("/editprofile/{id}")
+    @GetMapping( "/editprofile/{id}")
     public String editProfile(@PathVariable long id, Model model){
         model.addAttribute("user", userService.getUserById(id));
+        return "edituserprofile";
+    }
+
+    @GetMapping("/editprofile")
+    public String editProfile(Model model){
+        model.addAttribute("user", userService.getUserById(editedUserId));
         return "edituserprofile";
     }
 
@@ -161,6 +168,8 @@ public class MainController {
         System.out.println("deleteAccount");
         String userToDelete = userService.getUserById(id).getUsername();
         tweetService.deleteTweetByUserId(id);
+        followingService.deleteFollowingByOwnerId(id);
+        followerService.deleteFollowerByOwnerId(id);
         userService.deleteUser(id);
         loggedInUser = loggedInUser.getId() == id ? (null) : (loggedInUser);
         redirectAttributes.addFlashAttribute("deletemessage", loggedInUser != null ?
@@ -170,8 +179,8 @@ public class MainController {
 
     @PostMapping("/updateuser")
     public String updateUser(@ModelAttribute("user") User editedUser, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
-        System.out.println("updateUser: ");
         User user = userService.getUserById(editedUser.getId());
+        editedUserId = user.getId();
         editedUser.setRoleId(loggedInUser.getRoleId());
         if(editedUser.getPassword().compareTo(user.getPassword()) != 0) editedUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
 
@@ -297,7 +306,6 @@ public class MainController {
             retweetService.saveRetweet(new Retweet(loggedInUser.getId(), tweetService.getTweetById(id)));
         }
 
-
         return "redirect:/userprofile/{userid}";
     }
 
@@ -350,7 +358,6 @@ public class MainController {
 
     public List<Tweet> getUsersTweetAndRetweet (long id){
         List<Tweet> usersTweetsAndRetweets = new ArrayList<>();
-
         tweetService.getAllTweets().forEach(tw -> {
             if(tw.getUserId() == id) usersTweetsAndRetweets.add(tw);
             tw.getRetweets().forEach(re -> {
