@@ -47,13 +47,13 @@
                                     <a th:href="@{/userprofile/}+${user.id}" class="list-group-item"><i class="far fa-user"></i> Profile</a>
                                     <a th:href="@{/editprofile/}+${user.id}" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
                                     <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
-                                    <a href="/loguserout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
+                                    <a href="/logout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
                                 </ul>
                             </div>
                         </div>
                         <!--LOG IN BUTTON-->
                         <div class="col" th:if="${user == null}">
-                            <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/login">
+                            <a class="btn btn-outline-primary" style="border-radius: 20px !important; font-weight: 600"  href="/login">
                                 Login
                             </a>
                         </div>
@@ -89,7 +89,7 @@
                 <div class="row follow-section">
                     <div class="col-sm-4">
                         <p style="font-weight: 700; padding-right: 0.5em; color: #657786; font-size: 12px ;" th:text="Tweets "></p>
-                        <p style="font-weight: 700; padding-right: 0.5em; color: #fab81e; font-size: 18px ;" th:text="${allTweets.size()}"></p>
+                        <p style="font-weight: 700; padding-right: 0.5em; color: #fab81e; font-size: 18px ;" th:text="${numberOfTweets}"></p>
 
                     </div>
                     <div class="col-sm-4">
@@ -111,7 +111,7 @@
 
             </div>
             <!--TWEET SECTION-->
-            <div class="col-sm-8 tweets-section">
+            <div class="col-sm-8 tweets-section mx-auto">
                 <!--INPUT FIELD FOR TWEETING A TEXT-->
                 <div th:if="${user != null}">
                     <form th:action="@{/saveTweet}" method="post" modelAttribute="tweet" enctype="multipart/form-data">
@@ -152,11 +152,15 @@
                                     </div>
                                     <div class="col-8 mt-2">
                                         <div class="row" th:if="${x.userId == y.id}">
-                                            <a th:href="@{/userprofile/}+${y.id}"><p style="font-size: 14px; color: #14171A; font-weight: bolder; margin-right: 1em;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
+                                            <a th:if="${user == null}"><p style="font-size: 14px; color: #14171A; font-weight: bolder; margin-right: 1em;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
+                                            <a th:if="${user != null}" th:href="@{/userprofile/}+${y.id}"><p style="font-size: 14px; color: #14171A; font-weight: bolder; margin-right: 1em;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
                                             <p style="color: #87939B" th:if="${x.userId == y.id}"
-                                               th:with="result=${localdatetime.getHour() - x.getDateTime().getHour() < 0 ?
-                                           (localdatetime.getDayOfMonth() + '/' + localdatetime.getMonth() + '/' + localdatetime.getYear()) :  (localdatetime.getHour() - x.getDateTime().getHour() == 0 ? (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') : (localdatetime.getHour() - x.getDateTime().getHour() + 'h'))}"
+                                               th:with="result=${localdatetime.getMinute() - x.getDateTime().getMinute() >= 0 ?
+                                            (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') :
+                                            (localdatetime.getHour() - x.getDateTime().getHour() > 0 ? localdatetime.getHour() - x.getDateTime().getHour(): x.getDateTime().getDayOfMonth() + '/' + x.getDateTime().getMonth() + '/' + x.getDateTime().getYear())}"
                                                th:text="' @'+${y.username} + ' - ' + ${result}"></p>
+                                            <p th:text="${localdatetime.getHour() - x.getDateTime().getHour()}"></p>
+                                            <p th:text="${localdatetime.getMinute() - x.getDateTime().getMinute()}"></p>
                                         </div>
                                     </div>
                                 </div>

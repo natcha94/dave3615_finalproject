@@ -14,73 +14,84 @@
 </head>
 <body>
 
+    <!--NAVBAR-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
-        <a class="navbar-brand" href="/home"><i class="fas fa-home"></i> Home</a>
-        <a class="navbar-brand" href="/home"><i class="far fa-bell"> </i>Notifications</a>
-        <a class="navbar-brand" href="/home"><i class="far fa-envelope"></i> Message</a>
-
-        <a class="navbar-brand" href="/home"><i class="fab fa-twitter"></i></a>
-
-        <form th:action="@{/searching}" method="get" class="form-inline ">
-            <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search" name="searchinput">
-            <i class="fas fa-search" aria-hidden="true"></i>
-        </form>
-
-        <div th:if="${user != null}" class="row logout-user-section">
-            <div class="col-sm-12">
-                <a href="#" data-toggle="popover" th:title="${user.firstName}" data-placement="bottom">
-                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
-                </a>
-                <ul id="popover-content" class="list-group" style="display: none">
-                    <a th:href="@{/userprofile/}+${user.id}" class="list-group-item"><i class="far fa-user"></i> Profile</a>
-                    <a th:href="@{/editprofile/}+${user.id}" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
-                    <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
-                    <a href="/loguserout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
-                </ul>
+        <div class="row" style="width: 100%">
+            <div class="col-sm-5" style="text-align: right; padding-right: 6em;">
+                <a class="navbar-brand" href="/home"><i class="fas fa-home"></i> Home</a>
+                <a class="navbar-brand" href="/home"><i class="far fa-bell"> </i>Notifications</a>
+                <a class="navbar-brand" href="/home"><i class="far fa-envelope"></i> Message</a>
             </div>
+            <div class="col-sm-3" style="text-align: center">
+                <a class="navbar-brand" href="/home"><i class="fab fa-twitter fa-2x"></i></a>
+            </div>
+            <div class="col-sm-4" >
+                <div class="row" style="width: 70%; margin: 0">
+                    <div class="col-sm-9">
+                        <!--SEARCHBAR-->
+                        <form th:action="@{/searching}" method="get" class="form-inline ">
+                            <input class="form-control form-control-sm mr-3 w-75 search-input" type="text" placeholder="Search" aria-label="Search" name="searchinput">
+                        </form>
+                    </div>
 
-        </div>
-        <div class="col" th:if="${user == null}">
-            <a class="btn btn-outline-success my-2 my-sm-0 mx-5" href="/login">
-                Login
-            </a>
+                    <div class="col-sm-3">
+                        <!--USER ACTION-->
+
+                        <div th:if="${user != null}" class="row logout-user-section">
+                            <div>
+                                <a href="#" data-toggle="popover" th:title="${user.firstName}" data-placement="bottom">
+                                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
+                                </a>
+                                <ul id="popover-content" class="list-group" style="display: none">
+                                    <a th:href="@{/userprofile/}+${user.id}" class="list-group-item"><i class="far fa-user"></i> Profile</a>
+                                    <a th:href="@{/editprofile/}+${user.id}" class="list-group-item"><i class="fas fa-cog"></i> Setting</a>
+                                    <a th:if="${user.getRoleId().getRoleName() == 'Admin'}" href="/adminpage" class="list-group-item"><i class="fas fa-user-shield"></i> Admin</a>
+                                    <a href="/logout" class="list-group-item" th:text="'log out @' + ${user.username}"> </a>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--LOG IN BUTTON-->
+                        <div class="col" th:if="${user == null}">
+                            <a class="btn btn-outline-primary" style="border-radius: 20px !important; font-weight: 600"  href="/login">
+                                Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
         </div>
 
     </nav>
 
-
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-8 tweets-section">
-                <div th:if="${deletemessage}">
-                    <h2 th:text="${deletemessage}"/>
-                </div>
-                <div>
-                    <div th:each="x : ${allUsers}">
-                        <div class="tweetcard">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <img th:src="${x.profileImage}" alt="Avatar" class="avatar">
-                                </div>
-                                <div class="col-sm-8">
-                                    <p th:text="${x.firstName} + ' ' + ${x.lastName}"></p>
-                                    <p th:text="'@'+${x.username}"></p>
-                                </div>
+    <!--END NAVBAR-->
+    <div class="container mx-auto">
+        <div class="col-md-12 tweets-section">
+            <div th:if="${deletemessage}">
+                <h2 th:text="${deletemessage}"/>
+            </div>
+            <div>
+                <!--SHOW ALL FOLLOWINGS-->
+                <div th:each="x : ${allUsers}">
+                    <div class="tweetcard mt-4">
+                        <div class="row mb-4">
+                            <div class="col-sm-4" style="text-align: center">
+                                <img th:src="${x.profileImage}" alt="Avatar" class="avatar">
                             </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <a class="btn my-2 my-sm-0 mx-5 setting-btn" th:href="@{/editprofile/}+${x.id}">
-                                        Edit profile
-                                    </a>
-                                </div>
+                            <div class="col-sm-4" style="text-align: center">
+                                <p th:text="${x.firstName} + ' ' + ${x.lastName}"></p>
+                                <p th:text="'@'+${x.username}"></p>
+                            </div>
+                            <div class="col-sm-4 editprofile-btn" style="text-align: center">
+                                <a class="btn setting-btn" th:href="@{/editprofile/}+${x.id}">
+                                    Edit profile
+                                </a>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 

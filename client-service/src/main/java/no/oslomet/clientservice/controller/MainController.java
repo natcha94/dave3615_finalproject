@@ -42,6 +42,9 @@ public class MainController {
 
     @GetMapping("/")
     public String home(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByUserName(auth.getName());
+        loggedInUser = user;
         indexModelAttribute(model, tweetService.getAllTweets());
         return "index";
     }
@@ -61,13 +64,6 @@ public class MainController {
         System.out.println("homePage: " + loggedInUser.getUsername() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + loggedInUser.getPassword() + ", " + loggedInUser.getProfileImage());
 
         return "index";
-    }
-
-    @GetMapping("/loguserout")
-    public String logout(){
-        System.out.println("logout");
-        loggedInUser = null;
-        return "redirect:/";
     }
 
     @GetMapping("/signup")
@@ -154,12 +150,14 @@ public class MainController {
     @GetMapping( "/editprofile/{id}")
     public String editProfile(@PathVariable long id, Model model){
         model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("loggedInUser", loggedInUser);
         return "edituserprofile";
     }
 
     @GetMapping("/editprofile")
     public String editProfile(Model model){
         model.addAttribute("user", userService.getUserById(editedUserId));
+        model.addAttribute("loggedInUser", loggedInUser);
         return "edituserprofile";
     }
 
@@ -325,6 +323,7 @@ public class MainController {
     public Model indexModelAttribute(Model model, List<Tweet> allTweets){
         model.addAttribute("userlist", userService.getAllUsers());
         model.addAttribute("allTweets", allTweets);
+        if(loggedInUser != null) model.addAttribute("numberOfTweets", getUsersTweetAndRetweet(loggedInUser.getId()).size());
         model.addAttribute("user", loggedInUser);
         model.addAttribute("numberOfFollowing", loggedInUser == null ? (null) : followingService.getFollowingByOwnerId(loggedInUser.getId()).size());
         model.addAttribute("numberOfFollower", loggedInUser == null ? (null) : followerService.getFollowerByOwnerId(loggedInUser.getId()).size());
@@ -343,6 +342,7 @@ public class MainController {
 
     public Model userprofileModelAttribute(Model model, List<User> followingList, long id){
         model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("disableFollowingBtn", id == loggedInUser.getId() ? true : false);
         model.addAttribute("disableEditBtn", id == loggedInUser.getId() ? true : false);
         model.addAttribute("isFollowing", checkIfFollowing(id));
