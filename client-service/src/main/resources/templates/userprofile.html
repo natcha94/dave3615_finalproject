@@ -188,9 +188,13 @@
                                             <div class="row" th:if="${x.userId == y.id}">
                                                 <a th:href="@{/userprofile/}+${y.id}"><p style="font-size: 14px; color: #14171A; font-weight: bolder; margin-right: 1em;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
                                                 <p style="color: #87939B" th:if="${x.userId == y.id}"
-                                                   th:with="result=${localdatetime.getHour() - x.getDateTime().getHour() < 0 ?
-                                           (localdatetime.getDayOfMonth() + '/' + localdatetime.getMonth() + '/' + localdatetime.getYear()) :  (localdatetime.getHour() - x.getDateTime().getHour() == 0 ? (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') : (localdatetime.getHour() - x.getDateTime().getHour() + 'h'))}"
-                                                   th:text="' @'+${y.username} + ' - ' + ${result}"></p>
+                                                   th:with="diff=${
+                                               ((now.getTime()-x.getDateTime().getTime())/(60 * 1000))%60  >= 60 ?
+                                                ((now.getTime()-x.getDateTime().getTime())/(60 * 60 * 1000))%24 >= 24 ?
+                                                 format.format(x.getDateTime()) : ((now.getTime()-x.getDateTime().getTime())/(60 * 60 * 1000))%24 + 'h'
+                                               : ((now.getTime()-x.getDateTime().getTime())/(60 * 1000))%60 + 'm'
+                                               }"
+                                                   th:text="' @'+${y.username} + ' - ' + ${diff}"></p><br/>
                                             </div>
                                         </div>
                                     </div>

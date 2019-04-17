@@ -20,7 +20,8 @@ public class Tweet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private LocalDateTime dateTime;
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date dateTime = new Date();
     @Column(length = 140)
     private String text;
     private long userId;

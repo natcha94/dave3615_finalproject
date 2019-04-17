@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.nio.file.Path;
@@ -38,10 +39,11 @@ public class MainController {
 
     private User loggedInUser;
     private long editedUserId = 0;
+    private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
     private String imageFolder = "C:\\Users\\mebix\\Documents\\Github\\dave3615_finalproject\\client-service\\src\\main\\resources\\static\\images\\";
 
     @GetMapping("/")
-    public String home(Model model){
+    public String home(Model model) throws ParseException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUserName(auth.getName());
         loggedInUser = user;
@@ -55,32 +57,22 @@ public class MainController {
     }
 
     @GetMapping("/home")
-    public String homePage(Model model){
-        System.out.println("homePage");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getUserByUserName(auth.getName());
-        loggedInUser = user;
-        indexModelAttribute(model, tweetService.getAllTweets());
-        System.out.println("homePage: " + loggedInUser.getUsername() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + loggedInUser.getPassword() + ", " + loggedInUser.getProfileImage());
-
-        return "index";
+    public String homePage(){
+        return "redirect:/";
     }
 
     @GetMapping("/signup")
     public String signup(){
-        System.out.println("signup");
         return "signup";
     }
 
     @GetMapping("/signupAdmin")
     public String signupAdmin(){
-        System.out.println("signupAdmin");
         return "signupAdmin";
     }
 
     @PostMapping("/processRegistration")
     public String register(@ModelAttribute("user") User user){
-        System.out.println("processRegistration");
         user.setRoleId(roleService.getRoleById(1));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
@@ -89,7 +81,6 @@ public class MainController {
 
     @PostMapping("/processRegistrationAdmin")
     public String registerAdmin(@ModelAttribute("user") User adminUser){
-        System.out.println("processRegistrationAdmin");
         adminUser.setRoleId(roleService.getRoleById(2));
         adminUser.setPassword(passwordEncoder.encode(adminUser.getPassword()));
         userService.saveUser(adminUser);
@@ -99,13 +90,13 @@ public class MainController {
     @PostMapping("/saveTweet")
     public String saveTweet(@ModelAttribute("tweet")Tweet tweet, @RequestParam("files") MultipartFile[] file, RedirectAttributes redirectAttributes) throws ParseException {
 
-        if (file.length > 3) {
-            redirectAttributes.addFlashAttribute("message", "You can only upload 4 photos per tweet");
+        if (file.length > 2) {
+            redirectAttributes.addFlashAttribute("message", "You can only upload 3 photos per tweet");
             return "redirect:/home";
         }else{
 
             uploadImage(file,tweet);
-            tweet.setDateTime(LocalDateTime.now());
+            tweet.setDateTime(Calendar.getInstance().getTime());
             System.out.println("getDateTime: " + tweet.getDateTime());
             tweet.setUserId(loggedInUser.getId());
             tweetService.saveTweet(tweet);
@@ -114,7 +105,6 @@ public class MainController {
     }
 
     public void uploadImage(MultipartFile[] file, Tweet tweet) {
-        System.out.println("uploadImage " + file.length);
         Arrays.asList(file).forEach(afile -> {
             byte[] bytes = new byte[0];
             try {
@@ -214,7 +204,6 @@ public class MainController {
 
     @GetMapping("/follow/{id}")
     public String followAUser(@PathVariable long id, Model model){
-        System.out.println("followAUser");
         updateFollowingList(id);
         updateFollowerList(id);
         userService.saveUser(loggedInUser);
@@ -227,14 +216,11 @@ public class MainController {
     }
 
     public void updateFollowerList(long id){
-        System.out.println("updateFollowerList: " + userService.getUserById(id).getUsername());
-        System.out.println(userService.getUserById(id).getFollowerList().size());
         followerService.saveFollower(new Follower(id, loggedInUser));
     }
 
     @GetMapping("/unfollow/{id}")
     public String unfollowAUser(@PathVariable long id){
-        System.out.println("unfollowAUser");
         followingService.deleteAUserFollowing(loggedInUser.getId(), id);
         followerService.deleteAUserFollower(id, loggedInUser.getId());
         return "redirect:/userprofile/{id}";
@@ -242,7 +228,6 @@ public class MainController {
 
     @GetMapping("/allfollowing/{id}")
     public String getAllFollowing(@PathVariable long id, Model model){
-        System.out.println("getAllFollowing");
         List<User> followingList = new ArrayList<>();
         followingService.getFollowingByOwnerId(id).forEach(x -> followingList.add(x.getUser()));
         userprofileModelAttribute(model, followingList, id);
@@ -252,7 +237,6 @@ public class MainController {
 
     @GetMapping("/allfollower/{id}")
     public String getAllFollower(@PathVariable long id, Model model){
-        System.out.println("getAllFollower");
         List<User> followerList = new ArrayList<>();
         followerService.getFollowerByOwnerId(id).forEach(x -> followerList.add(x.getUser()));
         userprofileModelAttribute(model, followerList, id);
@@ -261,8 +245,7 @@ public class MainController {
     }
 
     @GetMapping("/tweetsfromfollowing")
-    public String tweetsFromFollowing(Model model){
-        System.out.println("tweetsFromFollowing");
+    public String tweetsFromFollowing(Model model) throws ParseException {
         List<Tweet> tweetsFromFollowings = new ArrayList<>();
         for (Following f : followingService.getFollowingByOwnerId(loggedInUser.getId()) ){
             tweetService.getTweetsByUserId(f.getUser().getId()).forEach(x -> tweetsFromFollowings.add(x));
@@ -273,8 +256,7 @@ public class MainController {
     }
 
     @GetMapping("/tweetsfromfriends")
-    public String tweetsFromFriends(Model model){
-        System.out.println("tweetsFromFriends");
+    public String tweetsFromFriends(Model model) throws ParseException {
         List<Tweet> tweetsFromFriends = new ArrayList<>();
         for (User usr : userService.getFriendsByUserId(loggedInUser.getId())){
             tweetService.getTweetsByUserId(usr.getId()).forEach(tw -> tweetsFromFriends.add(tw));
@@ -286,7 +268,6 @@ public class MainController {
 
     @GetMapping("/retweet/{id}")
     public String retweet(@PathVariable long id){
-        System.out.println("retweet");
         if(checkIfRetweet(id)){
             undoRetweet(id);
         }else{
@@ -320,20 +301,51 @@ public class MainController {
         tweetService.deleteTweetRetweetByUserId(tweetid, loggedInUser.getId());
     }
 
-    public Model indexModelAttribute(Model model, List<Tweet> allTweets){
+    public Model indexModelAttribute(Model model, List<Tweet> allTweets) throws ParseException {
         model.addAttribute("userlist", userService.getAllUsers());
         model.addAttribute("allTweets", allTweets);
         if(loggedInUser != null) model.addAttribute("numberOfTweets", getUsersTweetAndRetweet(loggedInUser.getId()).size());
         model.addAttribute("user", loggedInUser);
         model.addAttribute("numberOfFollowing", loggedInUser == null ? (null) : followingService.getFollowingByOwnerId(loggedInUser.getId()).size());
         model.addAttribute("numberOfFollower", loggedInUser == null ? (null) : followerService.getFollowerByOwnerId(loggedInUser.getId()).size());
-        model.addAttribute("localdatetime", LocalDateTime.now());
+        model.addAttribute("now", Calendar.getInstance().getTime());
+        model.addAttribute("format", format);
 
+/*        System.out.println("time: " + now);
+        Date d2 = null;
+        Date d1 = null;
+        try {
+
+            d2 = format.parse(now);
+            d1 = format.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(tweetService.getTweetById(1).getDateTime()));
+            //in milliseconds
+            long diff = d2.getTime() - d1.getTime();
+            System.out.println("d2.getTime: " +  d2.getTime());
+            System.out.println("d1.getTime: " +  d1.getTime());
+            System.out.println("d1.getTime2 : " +  format.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(tweetService.getTweetById(2).getDateTime())));
+            System.out.println("getTime: " +  tweetService.getTweetById(1).getDateTime().getTime());
+            System.out.println("getTime2: " +  tweetService.getTweetById(2).getDateTime().getTime());
+            System.out.println("diff: " + diff);
+            System.out.println("diff: " + (d2.getTime() - tweetService.getTweetById(1).getDateTime().getTime()));
+            tweetService.getTweetById(1).getDateTime().g;
+            long diffSeconds = diff / 1000 % 60;
+            long diffMinutes = diff / (60 * 1000) % 60;
+            long diffHours = diff / (60 * 60 * 1000) % 24;
+            long diffDays = diff / (24 * 60 * 60 * 1000);
+
+            System.out.print(diffDays + " days, ");
+            System.out.print(diffHours + " hours, ");
+            System.out.print(diffMinutes + " minutes, ");
+            System.out.print(diffSeconds + " seconds.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
         return model;
     }
 
     @GetMapping("/searching")
-    public String search(@RequestParam String searchinput, Model model){
+    public String search(@RequestParam String searchinput, Model model) throws ParseException {
         searchinput = searchinput.replaceAll("#", "");
         indexModelAttribute(model, tweetService.getTweetByText(searchinput));
 
@@ -352,7 +364,8 @@ public class MainController {
         model.addAttribute("allFollowing", followingList);
         model.addAttribute("allFollower", userService.getFollowersByUserId(id));
         model.addAttribute("userlist", userService.getAllUsers());
-        model.addAttribute("localdatetime", LocalDateTime.now());
+        model.addAttribute("now", Calendar.getInstance().getTime());
+        model.addAttribute("format", format);
         return model;
     }
 

@@ -22,11 +22,10 @@ public class TweetService {
 
     public List<Tweet> getAllTweets() {
         List<Tweet> allTweets = tweetRepository.findAll();
-        allTweets.forEach(x -> System.out.println("sort0: " + x.getId()));
-        Comparator<Tweet> tweetIdComparator = Comparator.comparingLong(Tweet::getId);
-        Collections.sort(allTweets, tweetIdComparator);
-        allTweets.forEach(x -> System.out.println("sort: " + x.getId()));
+        Comparator<Tweet> tweetDateComparator = Comparator.comparing(Tweet::getDateTime);
+        Collections.sort(allTweets, tweetDateComparator);
         reverseTweetList(allTweets);
+
         return allTweets;
     }
 
@@ -48,6 +47,7 @@ public class TweetService {
     }
 
     public Tweet saveTweet(Tweet tweet) {
+        System.out.println("save: " );
         Pattern pattern = Pattern.compile("#\\S+");
         List<String> hashtags = new ArrayList<>();
 
@@ -62,6 +62,8 @@ public class TweetService {
                 tweet.getHashtags().add(new Hashtag(word));
             }
         });
+
+        System.out.println("save2: ");
 
         return tweetRepository.save(tweet);
     }
