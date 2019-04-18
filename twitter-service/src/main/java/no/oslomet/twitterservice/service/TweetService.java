@@ -22,10 +22,10 @@ public class TweetService {
 
     public List<Tweet> getAllTweets() {
         List<Tweet> allTweets = tweetRepository.findAll();
-        allTweets.forEach(x -> System.out.println("sort0: " + x.getId()));
-        Comparator<Tweet> tweetIdComparator = Comparator.comparingLong(Tweet::getId);
-        Collections.sort(allTweets, tweetIdComparator);
-        allTweets.forEach(x -> System.out.println("sort: " + x.getId()));
+
+        Comparator<Tweet> tweetDateTimeComparator = Comparator.comparing(Tweet::getDateTime);
+        Collections.sort(allTweets, tweetDateTimeComparator);
+
         reverseTweetList(allTweets);
         return allTweets;
     }

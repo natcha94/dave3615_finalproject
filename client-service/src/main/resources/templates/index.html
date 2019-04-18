@@ -135,7 +135,7 @@
                     <!--FILTERING TWEET-->
                     <div th:if="${user != null}" class="dropdown">
                         <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            FILTER FEED
+                            FILTERING YOUR FEED
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                             <a class="dropdown-item" href="/tweetsfromfollowing">See tweets from followings</a>
@@ -157,10 +157,10 @@
                                             <p style="color: #87939B" th:if="${x.userId == y.id}"
                                                th:with="result=${localdatetime.getMinute() - x.getDateTime().getMinute() >= 0 ?
                                             (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') :
-                                            (localdatetime.getHour() - x.getDateTime().getHour() > 0 ? localdatetime.getHour() - x.getDateTime().getHour(): x.getDateTime().getDayOfMonth() + '/' + x.getDateTime().getMonth() + '/' + x.getDateTime().getYear())}"
+                                            (localdatetime.getHour() - x.getDateTime().getHour() > 0 ? localdatetime.getHour() - x.getDateTime().getHour() + 'h': x.getDateTime().getDayOfMonth() + '/' + x.getDateTime().getMonth() + '/' + x.getDateTime().getYear())}"
                                                th:text="' @'+${y.username} + ' - ' + ${result}"></p>
-                                            <p th:text="${localdatetime.getHour() - x.getDateTime().getHour()}"></p>
-                                            <p th:text="${localdatetime.getMinute() - x.getDateTime().getMinute()}"></p>
+                                      <!--      <p th:text="${localdatetime.getHour() - x.getDateTime().getHour()}"></p>
+                                            <p th:text="${localdatetime.getMinute() - x.getDateTime().getMinute()}"></p>-->
                                         </div>
                                     </div>
                                 </div>

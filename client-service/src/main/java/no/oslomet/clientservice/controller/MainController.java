@@ -56,14 +56,8 @@ public class MainController {
 
     @GetMapping("/home")
     public String homePage(Model model){
-        System.out.println("homePage");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getUserByUserName(auth.getName());
-        loggedInUser = user;
-        indexModelAttribute(model, tweetService.getAllTweets());
-        System.out.println("homePage: " + loggedInUser.getUsername() + ", " + loggedInUser.getRoleId().getRoleName() + ", " + loggedInUser.getPassword() + ", " + loggedInUser.getProfileImage());
 
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/signup")
