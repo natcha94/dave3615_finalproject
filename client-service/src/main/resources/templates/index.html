@@ -159,8 +159,6 @@
                                             (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') :
                                             (localdatetime.getHour() - x.getDateTime().getHour() > 0 ? localdatetime.getHour() - x.getDateTime().getHour() + 'h': x.getDateTime().getDayOfMonth() + '/' + x.getDateTime().getMonth() + '/' + x.getDateTime().getYear())}"
                                                th:text="' @'+${y.username} + ' - ' + ${result}"></p>
-                                      <!--      <p th:text="${localdatetime.getHour() - x.getDateTime().getHour()}"></p>
-                                            <p th:text="${localdatetime.getMinute() - x.getDateTime().getMinute()}"></p>-->
                                         </div>
                                     </div>
                                 </div>

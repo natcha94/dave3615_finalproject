@@ -35,7 +35,6 @@ public class FollowerController {
 
     @DeleteMapping("/followers/{ownerid}/{id}")
     public void deleteAUserFollower(@PathVariable long ownerid, @PathVariable long id){
-        System.out.println("deleteAUserFollowing from rest");
         followerService.deleteAUsersFollower(ownerid, id);
     }
 

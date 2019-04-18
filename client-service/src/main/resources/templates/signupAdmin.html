@@ -5,20 +5,20 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <!--<link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />-->
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <title>Register new admin user</title>
+    <title>Sign up admin user for Twitter / Twitter</title>
 </head>
 <body>
 
-<div class="container">
+<div class="container  signup-container">
 
-    <div class="row justify-content-md-center mt-5">
+    <div class="row signup-wrapped mt-5">
         <div class="col-6">
-            <h4 class="mb-4">Registration Form</h4>
+            <h4 class="mb-4">Create your admin account</h4>
             <form th:action="@{/processRegistrationAdmin}" modelAttribute="user" method="post">
                 <div class="form-group">
                     <input type="text"   name="firstName" class="form-control" placeholder="First Name">
@@ -37,7 +37,7 @@
                     <input type="password"  name="password" class="form-control" placeholder="Password">
                 </div>
                 <div>
-                    <button class="btn btn-success btn-lg btn-block mt-3">Save</button>
+                    <button class="btn btn-outline-primary  btn-lg btn-block mt-3">Save</button>
                 </div>
 
             </form>

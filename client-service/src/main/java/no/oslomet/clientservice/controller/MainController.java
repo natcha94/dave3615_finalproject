@@ -55,26 +55,22 @@ public class MainController {
     }
 
     @GetMapping("/home")
-    public String homePage(Model model){
-
+    public String homePage(){
         return "redirect:/";
     }
 
     @GetMapping("/signup")
     public String signup(){
-        System.out.println("signup");
         return "signup";
     }
 
     @GetMapping("/signupAdmin")
     public String signupAdmin(){
-        System.out.println("signupAdmin");
         return "signupAdmin";
     }
 
     @PostMapping("/processRegistration")
     public String register(@ModelAttribute("user") User user){
-        System.out.println("processRegistration");
         user.setRoleId(roleService.getRoleById(1));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
@@ -83,7 +79,6 @@ public class MainController {
 
     @PostMapping("/processRegistrationAdmin")
     public String registerAdmin(@ModelAttribute("user") User adminUser){
-        System.out.println("processRegistrationAdmin");
         adminUser.setRoleId(roleService.getRoleById(2));
         adminUser.setPassword(passwordEncoder.encode(adminUser.getPassword()));
         userService.saveUser(adminUser);
@@ -93,11 +88,10 @@ public class MainController {
     @PostMapping("/saveTweet")
     public String saveTweet(@ModelAttribute("tweet")Tweet tweet, @RequestParam("files") MultipartFile[] file, RedirectAttributes redirectAttributes) throws ParseException {
 
-        if (file.length > 3) {
-            redirectAttributes.addFlashAttribute("message", "You can only upload 4 photos per tweet");
+        if (file.length > 2) {
+            redirectAttributes.addFlashAttribute("message", "You can only upload 3 photos per tweet");
             return "redirect:/home";
         }else{
-
             uploadImage(file,tweet);
             tweet.setDateTime(LocalDateTime.now());
             System.out.println("getDateTime: " + tweet.getDateTime());
@@ -108,7 +102,6 @@ public class MainController {
     }
 
     public void uploadImage(MultipartFile[] file, Tweet tweet) {
-        System.out.println("uploadImage " + file.length);
         Arrays.asList(file).forEach(afile -> {
             byte[] bytes = new byte[0];
             try {
@@ -157,7 +150,6 @@ public class MainController {
 
     @GetMapping("/deleteaccount/{id}")
     public String deleteAccount(@PathVariable long id, RedirectAttributes redirectAttributes){
-        System.out.println("deleteAccount");
         String userToDelete = userService.getUserById(id).getUsername();
         tweetService.deleteTweetByUserId(id);
         followingService.deleteFollowingByOwnerId(id);
@@ -208,7 +200,6 @@ public class MainController {
 
     @GetMapping("/follow/{id}")
     public String followAUser(@PathVariable long id, Model model){
-        System.out.println("followAUser");
         updateFollowingList(id);
         updateFollowerList(id);
         userService.saveUser(loggedInUser);
@@ -221,14 +212,11 @@ public class MainController {
     }
 
     public void updateFollowerList(long id){
-        System.out.println("updateFollowerList: " + userService.getUserById(id).getUsername());
-        System.out.println(userService.getUserById(id).getFollowerList().size());
         followerService.saveFollower(new Follower(id, loggedInUser));
     }
 
     @GetMapping("/unfollow/{id}")
     public String unfollowAUser(@PathVariable long id){
-        System.out.println("unfollowAUser");
         followingService.deleteAUserFollowing(loggedInUser.getId(), id);
         followerService.deleteAUserFollower(id, loggedInUser.getId());
         return "redirect:/userprofile/{id}";
@@ -236,7 +224,6 @@ public class MainController {
 
     @GetMapping("/allfollowing/{id}")
     public String getAllFollowing(@PathVariable long id, Model model){
-        System.out.println("getAllFollowing");
         List<User> followingList = new ArrayList<>();
         followingService.getFollowingByOwnerId(id).forEach(x -> followingList.add(x.getUser()));
         userprofileModelAttribute(model, followingList, id);
@@ -246,7 +233,6 @@ public class MainController {
 
     @GetMapping("/allfollower/{id}")
     public String getAllFollower(@PathVariable long id, Model model){
-        System.out.println("getAllFollower");
         List<User> followerList = new ArrayList<>();
         followerService.getFollowerByOwnerId(id).forEach(x -> followerList.add(x.getUser()));
         userprofileModelAttribute(model, followerList, id);
@@ -256,7 +242,6 @@ public class MainController {
 
     @GetMapping("/tweetsfromfollowing")
     public String tweetsFromFollowing(Model model){
-        System.out.println("tweetsFromFollowing");
         List<Tweet> tweetsFromFollowings = new ArrayList<>();
         for (Following f : followingService.getFollowingByOwnerId(loggedInUser.getId()) ){
             tweetService.getTweetsByUserId(f.getUser().getId()).forEach(x -> tweetsFromFollowings.add(x));
@@ -268,7 +253,6 @@ public class MainController {
 
     @GetMapping("/tweetsfromfriends")
     public String tweetsFromFriends(Model model){
-        System.out.println("tweetsFromFriends");
         List<Tweet> tweetsFromFriends = new ArrayList<>();
         for (User usr : userService.getFriendsByUserId(loggedInUser.getId())){
             tweetService.getTweetsByUserId(usr.getId()).forEach(tw -> tweetsFromFriends.add(tw));
@@ -280,7 +264,6 @@ public class MainController {
 
     @GetMapping("/retweet/{id}")
     public String retweet(@PathVariable long id){
-        System.out.println("retweet");
         if(checkIfRetweet(id)){
             undoRetweet(id);
         }else{

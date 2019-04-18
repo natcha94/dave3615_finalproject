@@ -202,9 +202,6 @@ body {
     margin: 0 auto;
     font-weight: 700;
 }
-.tweetcard-header{
-
-}
 
 /*Images*/
 .wrapped {
@@ -267,4 +264,21 @@ body {
     height: auto;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.signup-container{
+    height: 70vh;
+}
+
+.signup-wrapped{
+    height: 78%;
+    width: 92%;
+    text-align: center;
+    line-height: 2.5em;
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+
 }
