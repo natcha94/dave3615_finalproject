@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class LoginService  implements UserDetailsService {
+public class LoginService implements UserDetailsService {
     String BASE_URL = "http://localhost:9090/users";
     private RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = restTemplate.getForObject(BASE_URL+"/"+username, User.class);
-        if(user == null) throw new UsernameNotFoundException("Not found user with email: " + username);
+        if(user == null) throw new UsernameNotFoundException("Not found user with username: " + username);
         return getUserDetails(user);
     }
 

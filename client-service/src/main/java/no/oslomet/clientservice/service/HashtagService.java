@@ -23,7 +23,6 @@ public class HashtagService {
 
     public Hashtag getHashtagByName(String hashtag)
     {
-        System.out.println("getHashtagByName: " +hashtag);
         return restTemplate.getForObject(BASE_URL+"/"+hashtag, Hashtag.class);
     }
 

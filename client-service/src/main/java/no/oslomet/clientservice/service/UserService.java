@@ -51,9 +51,6 @@ public class UserService{
 
     public User saveUser(User newUser)
     {
-        System.out.println("saveUser");
-        System.out.println(newUser.getRoleId().getRoleName());
-        System.out.println("saveUser updateFollowerList: " + newUser.getFollowerList().size());
         return restTemplate.postForObject(BASE_URL, newUser, User.class);
     }
 

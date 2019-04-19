@@ -94,7 +94,6 @@ public class MainController {
         }else{
             uploadImage(file,tweet);
             tweet.setDateTime(LocalDateTime.now());
-            System.out.println("getDateTime: " + tweet.getDateTime());
             tweet.setUserId(loggedInUser.getId());
             tweetService.saveTweet(tweet);
         }

@@ -34,7 +34,6 @@ public class FollowerService {
 
     public Follower saveFollower(Follower newFollower)
     {
-        System.out.println("saveFollower");
         return restTemplate.postForObject(BASE_URL, newFollower, Follower.class);
     }
 
@@ -47,7 +46,6 @@ public class FollowerService {
     }
 
     public void deleteAUserFollower(long ownerId , long id){
-        System.out.println("deleteAUserFollower from service");
         restTemplate.delete(BASE_URL+"/"+ownerId+"/"+id);
     }
     public void deleteFollowerByUser(long userid){
