@@ -280,5 +280,42 @@ body {
     align-items: center;
     border-radius: 10px;
     background-color: #FFFFFF;
+}
 
+.editprofile-wrapped{
+    height: 100%;
+    width: 100%;
+    line-height: 2.5em;
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    padding-bottom: 1em;
+}
+
+.popover-header{
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
+.popover-body{
+    color: #778794;
+    padding: 0;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    background-color: #FFFFFF;
+}
+
+.popover-body a {
+    color: #778794;
+    border: 0;
+    border-radius: 0;
+    background-color: #FFFFFF;
+}
+
+.popover-body a:hover{
+    background-color: #fab81e;
+    color: #ffffff;
 }

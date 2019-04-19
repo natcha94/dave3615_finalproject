@@ -44,6 +44,11 @@ public class TweetService {
             if(tw.getUserId() == id) tweetList.add(tw);
         });
 
+        Comparator<Tweet> tweetDateTimeComparator = Comparator.comparing(Tweet::getDateTime);
+        Collections.sort(tweetList, tweetDateTimeComparator);
+
+        reverseTweetList(tweetList);
+
         return tweetList;
     }
 

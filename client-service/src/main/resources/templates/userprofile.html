@@ -188,10 +188,14 @@
                                             <div class="row" th:if="${x.userId == y.id}">
                                                 <a th:href="@{/userprofile/}+${y.id}"><p style="font-size: 14px; color: #14171A; font-weight: bolder; margin-right: 1em;" th:text="${y.firstName} + ' ' + ${y.lastName}"></p></a>
                                                 <p style="color: #87939B" th:if="${x.userId == y.id}"
-                                                   th:with="result=${localdatetime.getMinute() - x.getDateTime().getMinute() >= 0 ?
-                                            (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') :
-                                            (localdatetime.getHour() - x.getDateTime().getHour() > 0 ? localdatetime.getHour() - x.getDateTime().getHour() + 'h': x.getDateTime().getDayOfMonth() + '/' + x.getDateTime().getMonth() + '/' + x.getDateTime().getYear())}"
-                                                   th:text="' @'+${y.username} + ' - ' + ${result}"></p>
+                                                   th:with="result=${
+                                                    (x.getDateTime().getDayOfMonth() + '/' + x.getDateTime().getMonth() + '/' + x.getDateTime().getYear()).toString().compareTo((localdatetime.getDayOfMonth() + '/' + localdatetime.getMonth() + '/' + localdatetime.getYear()).toString())
+                                                    == 0 ?
+                                                    localdatetime.getHour() - x.getDateTime().getHour() == 0 ?
+                                                    (localdatetime.getMinute() - x.getDateTime().getMinute() + 'm') :
+                                                    (localdatetime.getHour() - x.getDateTime().getHour() + 'h')
+                                                    : x.getDateTime().getDayOfMonth() + '/' + x.getDateTime().getMonth() + '/' + x.getDateTime().getYear()}"
+                                                th:text="' @'+${y.username} + ' - ' + ${result}"></p>
                                             </div>
                                         </div>
                                     </div>

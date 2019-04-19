@@ -169,7 +169,7 @@ public class MainController {
         if(editedUser.getPassword().compareTo(user.getPassword()) != 0) editedUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
 
         if(file.isEmpty()){
-            editedUser.setProfileImage(loggedInUser.getProfileImage());
+            editedUser.setProfileImage(user.getProfileImage());
         }else{
             uploadSingleImage(file);
             editedUser.setProfileImage("/images/profileImage/" + file.getOriginalFilename());
@@ -246,7 +246,7 @@ public class MainController {
         for (Following f : followingService.getFollowingByOwnerId(loggedInUser.getId()) ){
             tweetService.getTweetsByUserId(f.getUser().getId()).forEach(x -> tweetsFromFollowings.add(x));
         }
-
+        sortTweetByTime(tweetsFromFollowings);
         indexModelAttribute(model, tweetsFromFollowings);
         return "index";
     }
@@ -257,9 +257,16 @@ public class MainController {
         for (User usr : userService.getFriendsByUserId(loggedInUser.getId())){
             tweetService.getTweetsByUserId(usr.getId()).forEach(tw -> tweetsFromFriends.add(tw));
         }
+        sortTweetByTime(tweetsFromFriends);
 
         indexModelAttribute(model, tweetsFromFriends);
         return "index";
+    }
+
+    public void sortTweetByTime (List<Tweet> tweetList) {
+        Comparator<Tweet> tweetDateTimeComparator = Comparator.comparing(Tweet::getDateTime);
+        Collections.sort(tweetList, tweetDateTimeComparator);
+        Collections.reverse(tweetList);
     }
 
     @GetMapping("/retweet/{id}")
