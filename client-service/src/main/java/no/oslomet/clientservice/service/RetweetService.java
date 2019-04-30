@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class RetweetService {
-    String BASE_URL = "http://localhost:9080/retweets";
+    String BASE_URL = "http://206.189.10.40:9080/retweets";
     private RestTemplate restTemplate = new RestTemplate();
 
     public List<Retweet> getAllRetweets()

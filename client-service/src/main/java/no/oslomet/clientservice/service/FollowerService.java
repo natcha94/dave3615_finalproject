@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class FollowerService {
-    String BASE_URL = "http://localhost:9090/followers";
+    String BASE_URL = "http://206.189.10.40:9090/followers";
     private RestTemplate restTemplate = new RestTemplate();
 
     public List<Follower> getAllFollowers()

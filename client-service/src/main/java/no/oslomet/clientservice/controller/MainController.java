@@ -3,6 +3,7 @@ package no.oslomet.clientservice.controller;
 import no.oslomet.clientservice.model.*;
 import no.oslomet.clientservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,10 +36,10 @@ public class MainController {
     private RetweetService retweetService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private Environment environment;
     private User loggedInUser;
     private long editedUserId = 0;
-    private String imageFolder = "C:\\Users\\mebix\\Documents\\Github\\dave3615_finalproject\\client-service\\src\\main\\resources\\static\\images\\";
 
     @GetMapping("/")
     public String home(Model model){
@@ -46,6 +47,7 @@ public class MainController {
         User user = userService.getUserByUserName(auth.getName());
         loggedInUser = user;
         indexModelAttribute(model, tweetService.getAllTweets());
+
         return "index";
     }
 
@@ -101,6 +103,7 @@ public class MainController {
     }
 
     public void uploadImage(MultipartFile[] file, Tweet tweet) {
+        String imageFolder = environment.getProperty("image.path");
         Arrays.asList(file).forEach(afile -> {
             byte[] bytes = new byte[0];
             try {
@@ -181,6 +184,7 @@ public class MainController {
     }
 
     public void uploadSingleImage(MultipartFile file) {
+        String imageFolder = environment.getProperty("image.path");
         try {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(imageFolder + "/profileImage/" + file.getOriginalFilename());
