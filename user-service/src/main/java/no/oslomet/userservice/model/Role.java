@@ -20,4 +20,9 @@ public class Role{
 
     public Role (){
     }
+
+    public Role (int id, String rolename){
+        this.id = id;
+        this.roleName = rolename;
+    }
 }

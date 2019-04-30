@@ -16,6 +16,8 @@ import java.util.List;
 @SpringBootApplication
 public class UserServiceApplication implements CommandLineRunner {
 
+    @Autowired
+    private RoleRepository roleRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
@@ -23,6 +25,7 @@ public class UserServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String...args) throws Exception {
-
+        roleRepository.save(new Role(1, "User"));
+        roleRepository.save(new Role(2, "Admin"));
     }
 }
