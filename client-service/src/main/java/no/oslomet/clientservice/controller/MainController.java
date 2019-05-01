@@ -184,7 +184,7 @@ public class MainController {
         try {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(imageFolder + "/profileImage/" + file.getOriginalFilename());
-            Files.write(path, bytes);
+            //Files.write(path, bytes);
         } catch (IOException e) {
             e.printStackTrace();
         }
