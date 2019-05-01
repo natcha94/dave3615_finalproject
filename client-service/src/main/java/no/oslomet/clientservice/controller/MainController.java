@@ -3,7 +3,7 @@ package no.oslomet.clientservice.controller;
 import no.oslomet.clientservice.model.*;
 import no.oslomet.clientservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,8 +36,8 @@ public class MainController {
     private RetweetService retweetService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private Environment environment;
+    @Value("${image.path}")
+    private String imageFolder;
     private User loggedInUser;
     private long editedUserId = 0;
 
@@ -89,10 +89,8 @@ public class MainController {
 
     @PostMapping("/saveTweet")
     public String saveTweet(@ModelAttribute("tweet")Tweet tweet, @RequestParam("files") MultipartFile[] file, RedirectAttributes redirectAttributes) throws ParseException {
-
-        if (file.length > 2) {
-            redirectAttributes.addFlashAttribute("message", "You can only upload 3 photos per tweet");
-            return "redirect:/home";
+        if (file.length > 3) {
+            redirectAttributes.addFlashAttribute("uploadmessage", "You can only upload 3 photos per tweet");
         }else{
             uploadImage(file,tweet);
             tweet.setDateTime(LocalDateTime.now());
@@ -103,7 +101,6 @@ public class MainController {
     }
 
     public void uploadImage(MultipartFile[] file, Tweet tweet) {
-        String imageFolder = environment.getProperty("image.path");
         Arrays.asList(file).forEach(afile -> {
             byte[] bytes = new byte[0];
             try {
@@ -184,7 +181,6 @@ public class MainController {
     }
 
     public void uploadSingleImage(MultipartFile file) {
-        String imageFolder = environment.getProperty("image.path");
         try {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(imageFolder + "/profileImage/" + file.getOriginalFilename());
