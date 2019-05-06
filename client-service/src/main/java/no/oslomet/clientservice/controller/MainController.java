@@ -93,7 +93,7 @@ public class MainController {
     public String saveTweet(@ModelAttribute("tweet")Tweet tweet, @RequestParam("files") MultipartFile[] file, RedirectAttributes redirectAttributes) throws ParseException {
         if (file.length > 3) {
             redirectAttributes.addFlashAttribute("uploadmessage", "You can only upload 3 photos per tweet");
-        }else if(checkFileType(file).get() == false){
+        }else if(file.length == 0 && checkFileType(file).get() == false){
             redirectAttributes.addFlashAttribute("uploadmessage", "Please upload an image file");
         }else {
             uploadImage(file,tweet);
