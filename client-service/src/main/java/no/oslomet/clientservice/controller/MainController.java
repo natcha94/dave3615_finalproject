@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.ParseException;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 public class MainController {
@@ -91,16 +93,29 @@ public class MainController {
     public String saveTweet(@ModelAttribute("tweet")Tweet tweet, @RequestParam("files") MultipartFile[] file, RedirectAttributes redirectAttributes) throws ParseException {
         if (file.length > 3) {
             redirectAttributes.addFlashAttribute("uploadmessage", "You can only upload 3 photos per tweet");
-        }else{
+        }else if(checkFileType(file).get() == false){
+            redirectAttributes.addFlashAttribute("uploadmessage", "Please upload an image file");
+        }else {
             uploadImage(file,tweet);
             tweet.setDateTime(LocalDateTime.now());
             tweet.setUserId(loggedInUser.getId());
             tweetService.saveTweet(tweet);
         }
+
         return "redirect:/";
     }
 
+    public AtomicBoolean checkFileType(MultipartFile[] file){
+        AtomicBoolean isImage = new AtomicBoolean(true);
+        Arrays.asList(file).forEach(f -> {
+            if(!f.getContentType().contains("image")) isImage.set(false);
+        });
+
+        return isImage;
+    }
+
     public void uploadImage(MultipartFile[] file, Tweet tweet) {
+
         Arrays.asList(file).forEach(afile -> {
             byte[] bytes = new byte[0];
             try {
@@ -169,6 +184,9 @@ public class MainController {
 
         if(file.isEmpty()){
             editedUser.setProfileImage(user.getProfileImage());
+        }else if(!file.getContentType().contains("image")){
+            redirectAttributes.addFlashAttribute("message", "Please upload an image file");
+            return "redirect:/editprofile";
         }else{
             uploadSingleImage(file);
             editedUser.setProfileImage("/images/profileImage/" + file.getOriginalFilename());
@@ -184,7 +202,7 @@ public class MainController {
         try {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(imageFolder + "/profileImage/" + file.getOriginalFilename());
-            //Files.write(path, bytes);
+            Files.write(path, bytes);
         } catch (IOException e) {
             e.printStackTrace();
         }

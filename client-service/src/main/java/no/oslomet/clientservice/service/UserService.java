@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserService{
 
-    String BASE_URL = "http://206.189.10.40:9090/users";
+    String BASE_URL = "http://localhost:9090/users";
     private RestTemplate restTemplate = new RestTemplate();
 
     public List<User> getAllUsers()

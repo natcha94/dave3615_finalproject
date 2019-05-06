@@ -41,7 +41,7 @@
                         <div th:if="${user != null}" class="row logout-user-section">
                             <div>
                                 <a href="#" data-toggle="popover" th:title="${user.firstName}" data-placement="bottom">
-                                    <img th:src="${user.profileImage}" alt="Avatar" class="avatar-header">
+                                    <img th:src="'/upload/static'+${user.profileImage}" alt="Avatar" class="avatar-header">
                                 </a>
                                 <ul id="popover-content" class="list-group" style="display: none">
                                     <a th:href="@{/userprofile/}+${user.id}" class="list-group-item"><i class="far fa-user"></i> Profile</a>
@@ -77,7 +77,7 @@
             <div th:if="${user != null}" class="col-sm-3 about-user-section">
                 <div class="row">
                     <div class="col-sm-4">
-                        <img th:src="${user.profileImage}" alt="Avatar" class="avatar">
+                        <img th:src="'/upload/static'+${user.profileImage}" alt="Avatar" class="avatar">
                     </div>
                     <div class="col-sm-8">
                         <a th:href="@{/userprofile/}+${user.id}"><p style="font-size: 18px; color: #14171A; font-weight: bolder" th:text="${user.firstName} + ' ' + ${user.lastName}"></p></a>
@@ -149,7 +149,7 @@
                             <div class="col-12 ml-0">
                                 <div th:each="y : ${userlist}" class="row">
                                     <div class="col-1 mr-4">
-                                        <img th:if="${x.userId == y.id}" th:src="${y.profileImage}" alt="Avatar" class="avatar-tweetcard">
+                                        <img th:if="${x.userId == y.id}" th:src="'/upload/static'+${y.profileImage}" alt="Avatar" class="avatar-tweetcard">
                                     </div>
                                     <div class="col-8 mt-2">
                                         <div class="row" th:if="${x.userId == y.id}">
@@ -174,7 +174,7 @@
                             <div class="col-12">
                                 <div th:with="class=${x.imagePathList.size() == 3 ? 'wrapped multiple-image' : x.imagePathList.size() == 2 ?  'wrapped double-image' : 'wrapped'}" th:class="${class}">
                                     <div th:each="img : ${x.imagePathList}" class="img-container">
-                                        <img th:src="${img}" th:alt="${img}" />
+                                        <img th:src="'/upload/static'+${img}" th:alt="${img}" />
                                     </div>
                                 </div>
                                 <div th:if="${user != null}" class="row pb-3 tweetcard-action">

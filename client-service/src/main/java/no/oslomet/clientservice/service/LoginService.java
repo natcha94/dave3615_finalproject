@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class LoginService implements UserDetailsService {
-    String BASE_URL = "http://206.189.10.40:9090/users";
+    String BASE_URL = "http://localhost:9090/users";
     private RestTemplate restTemplate = new RestTemplate();
 
     @Override

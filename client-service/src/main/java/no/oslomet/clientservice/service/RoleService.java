@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Service
 public class RoleService {
 
-    String BASE_URL = "http://206.189.10.40:9090/roles";
+    String BASE_URL = "http://localhost:9090/roles";
     private RestTemplate restTemplate = new RestTemplate();
 
     public List<Role> getAllRoles()

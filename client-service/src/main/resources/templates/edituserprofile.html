@@ -40,7 +40,7 @@
                         <div th:if="${loggedInUser != null}" class="row logout-user-section">
                             <div>
                                 <a href="#" data-toggle="popover" th:title="${loggedInUser.firstName}" data-placement="bottom">
-                                    <img th:src="${loggedInUser.profileImage}" alt="Avatar" class="avatar-header">
+                                    <img th:src="'/upload/static' + ${loggedInUser.profileImage}" alt="Avatar" class="avatar-header">
                                 </a>
                                 <ul id="popover-content" class="list-group" style="display: none">
                                     <a th:href="@{/userprofile/}+${loggedInUser.id}" class="list-group-item"><i class="far fa-user"></i> Profile</a>
